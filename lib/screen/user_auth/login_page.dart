@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:we_healthy/screen/user_auth/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -29,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.only(left: 24.0, right: 24.0),
+        padding: const EdgeInsets.only(left: 24.0, right: 24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -37,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: EdgeInsets.only(bottom: 24.0),
               child: Center(
                 child: Text(
-                  'Login',
+                  'Masuk',
                   style: TextStyle(
                       fontSize: 32.0,
                       fontWeight: FontWeight.bold,
@@ -52,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                   TextField(
                     decoration: InputDecoration(
                       labelText: 'Email',
-                      hintText: 'Enter your Email',
+                      hintText: 'Masukkan Email',
                       prefixIcon:
                           const Icon(Icons.email), // Icon before the input
 
@@ -73,8 +74,8 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _passwordController,
                     obscureText: !_isPasswordVisible,
                     decoration: InputDecoration(
-                      labelText: 'Password',
-                      hintText: 'Enter your Password',
+                      labelText: 'Katasandi',
+                      hintText: 'Masukan Katasandi',
                       prefixIcon: const Icon(Icons.key),
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -120,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                       TextButton(
                         onPressed: () {},
                         child: const Text(
-                          'Lupa Password?',
+                          'Lupa Katasandi?',
                           style: TextStyle(
                             color: Colors.black,
                           ),
@@ -142,8 +143,24 @@ class _LoginPageState extends State<LoginPage> {
                             10), // Adjust the border radius as needed
                       ),
                     ),
-                    child: const Text('Login'),
-                  )
+                    child: const Text('Masuk'),
+                  ),
+                  const SizedBox(height: 15.0),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>  RegisterPage()),
+                      );
+                    },
+                    child: const Text(
+                      'Belum memiliki Akun? Daftar Akun Disini',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             )
