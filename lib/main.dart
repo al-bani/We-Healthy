@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:we_healthy/screen/home_screen.dart';
 import 'package:we_healthy/screen/user_auth/login_page.dart';
 
 void main() {
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'we healthy',
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: HomePage(),
     );
   }
 }

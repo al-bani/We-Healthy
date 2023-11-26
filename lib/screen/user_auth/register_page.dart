@@ -42,6 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.only(left: 24.0, right: 24.0),
         child: Column(
@@ -102,9 +103,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           decoration: InputDecoration(
                             contentPadding:
-                                const EdgeInsets.symmetric(vertical: 10),
-                            labelText: 'Nama Belakang',
-                            prefixIcon: const Icon(Icons.person), // Icon be
+                                const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                            labelText: 'Nama Belakang', // Icon be
+                            
                             hintText: 'Doe',
                             filled: true,
                             fillColor: Colors.grey[200],
