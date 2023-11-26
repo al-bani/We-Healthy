@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:we_healthy/screen/user_auth/login_page.dart';
+import 'package:we_healthy/utils/validator.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -9,17 +10,20 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final _formkey = GlobalKey<FormState>();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPassword = TextEditingController();
+  final _registerFormKey = GlobalKey<FormState>();
+  final _firstNameTextController = TextEditingController();
+  final _lastNameTextController = TextEditingController();
+  final _emailTextController = TextEditingController();
+  final _passwordTextController = TextEditingController();
+  final _confirmPasswordTextController = TextEditingController();
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
   bool isChecked = false;
 
   @override
   void dispose() {
-    _passwordController.dispose();
-    _confirmPassword.dispose();
+    _passwordTextController.dispose();
+    _confirmPasswordTextController.dispose();
     super.dispose();
   }
 
@@ -56,15 +60,21 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
             Form(
-              key: _formkey,
+              key: _registerFormKey,
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Expanded(
-                        child: TextField(
+                        child: TextFormField(
+                          controller: _firstNameTextController,
+                          validator: (value) => Validator.validateName(
+                            name: value,
+                          ),
                           decoration: InputDecoration(
+                            contentPadding:
+                                const EdgeInsets.symmetric(vertical: 10),
                             labelText: 'Nama Depan',
                             hintText: 'John',
                             prefixIcon: const Icon(
@@ -85,9 +95,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       const SizedBox(width: 10.0),
                       Expanded(
-                        child: TextField(
+                        child: TextFormField(
+                          controller: _lastNameTextController,
+                          validator: (value) => Validator.validateName(
+                            name: value,
+                          ),
                           decoration: InputDecoration(
+                            contentPadding:
+                                const EdgeInsets.symmetric(vertical: 10),
                             labelText: 'Nama Belakang',
+                            prefixIcon: const Icon(Icons.person), // Icon be
                             hintText: 'Doe',
                             filled: true,
                             fillColor: Colors.grey[200],
@@ -104,8 +121,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   const SizedBox(height: 20.0),
-                  TextField(
+                  TextFormField(
+                    controller: _emailTextController,
+                    validator: (value) => Validator.validateEmail(
+                      email: value,
+                    ),
                     decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 10),
                       labelText: 'Email',
                       hintText: 'Masukkan email',
                       prefixIcon: const Icon(Icons.email),
@@ -121,10 +143,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 20.0),
-                  TextField(
-                    controller: _passwordController,
+                  TextFormField(
+                    controller: _passwordTextController,
                     obscureText: !_isPasswordVisible,
+                    validator: (value) => Validator.validatePassword(
+                      password: value,
+                    ),
                     decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 10),
                       labelText: 'Katasandi',
                       hintText: 'Masukkan Katasandi',
                       prefixIcon: const Icon(Icons.key),
@@ -150,10 +176,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 20.0),
-                  TextField(
-                    controller: _confirmPassword,
+                  TextFormField(
+                    controller: _confirmPasswordTextController,
                     obscureText: !_isConfirmPasswordVisible,
+                    validator: (value) => Validator.validatePassword(
+                      password: value,
+                    ),
                     decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 10),
                       labelText: 'Konfirmasi Katasandi',
                       hintText: 'Ulangi Katasandi',
                       prefixIcon: const Icon(Icons.key),
@@ -207,8 +237,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) =>  LoginPage()),
+                        MaterialPageRoute(builder: (context) => LoginPage()),
                       );
                     },
                     child: const Text(

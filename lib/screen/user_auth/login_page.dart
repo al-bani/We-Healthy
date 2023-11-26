@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:we_healthy/screen/user_auth/register_page.dart';
+import 'package:we_healthy/utils/validator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,13 +11,14 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formkey = GlobalKey<FormState>();
-  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _passwordTextController = TextEditingController();
+  TextEditingController _emailTextController = TextEditingController();
   bool _isPasswordVisible = false;
   bool isChecked = false;
 
   @override
   void dispose() {
-    _passwordController.dispose();
+    _passwordTextController.dispose();
     super.dispose();
   }
 
@@ -50,7 +52,11 @@ class _LoginPageState extends State<LoginPage> {
               key: _formkey,
               child: Column(
                 children: <Widget>[
-                  TextField(
+                  TextFormField(
+                    controller: _emailTextController,
+                    validator: (value) => Validator.validateEmail(
+                      email: value,
+                    ),
                     decoration: InputDecoration(
                       labelText: 'Email',
                       hintText: 'Masukkan Email',
@@ -70,8 +76,11 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 20.0),
-                  TextField(
-                    controller: _passwordController,
+                  TextFormField(
+                    validator: (value) => Validator.validatePassword(
+                      password: value,
+                    ),
+                    controller: _passwordTextController,
                     obscureText: !_isPasswordVisible,
                     decoration: InputDecoration(
                       labelText: 'Katasandi',
@@ -150,8 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) =>  RegisterPage()),
+                        MaterialPageRoute(builder: (context) => RegisterPage()),
                       );
                     },
                     child: const Text(
