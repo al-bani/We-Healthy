@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:we_healthy/screen/home_screen.dart';
 import 'package:we_healthy/screen/user_auth/login_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -15,7 +22,8 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'we healthy',
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: LoginPage(),
     );
   }
 }
+ 

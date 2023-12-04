@@ -5,7 +5,7 @@ class Validator {
     }
 
     if (name.isEmpty) {
-      return 'Name cannot be empty';
+      return 'Nama tidak boleh kosong';
     }
     return null;
   }
@@ -19,9 +19,9 @@ class Validator {
         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 
     if (email.isEmpty) {
-      return 'Email can\'t be empty';
+      return 'Email tidak boleh kosong';
     } else if (!emailRegExp.hasMatch(email)) {
-      return 'Enter a correct email';
+      return 'Masukkan email yang benar';
     }
     return null;
   }
@@ -34,13 +34,37 @@ class Validator {
     }
 
     if (password.isEmpty) {
-      return 'Password can\'t be empty';
+      return 'Kata Sandi tidak boleh kosong';
     } else if (password.length < 8) {
-      return 'Enter a password with a length of at least 6';
+      return 'Masukkan Kata sandi minimal 8 karakter';
     }
 
     if (lowercaseRegExp.hasMatch(password)) {
-      return "String tidak mengandung huruf kapital.";
+      return "Kata sandi tidak mengandung huruf kapital";
+    }
+    return null;
+  }
+
+  static String? validateConfirmPassword(
+      {required String? password, String? confirmPassword}) {
+    RegExp lowercaseRegExp = RegExp(r"^[^A-Z]*$");
+
+    if (password != confirmPassword) {
+      return 'Konfirmasi Kata sandi tidak sesuai';
+    }
+
+    if (password == null) {
+      return null;
+    }
+
+    if (password.isEmpty) {
+      return 'Kata Sandi tidak boleh kosong';
+    } else if (password.length < 8) {
+      return 'Masukkan Kata sandi minimal 8 karakter';
+    }
+
+    if (lowercaseRegExp.hasMatch(password)) {
+      return "Kata sandi tidak mengandung huruf kapital";
     }
     return null;
   }

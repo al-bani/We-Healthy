@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "120185473230",
+    "project_id": "we-healthy-project",
+    "storage_bucket": "we-healthy-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120185473230:android:e40841d570c6c40db2e89f",
+        "android_client_info": {
+          "package_name": "com.example.we_healthy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0VfcMzTTQ3b_aQihtUXUxZ2sie_D-icI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
