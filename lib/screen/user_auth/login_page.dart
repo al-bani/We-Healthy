@@ -24,11 +24,17 @@ class _LoginPageState extends State<LoginPage> {
   bool _isProcessing = false;
   bool _isPasswordVisible = false;
   bool _isChecked = false;
+  bool _errInfo = false;
 
   @override
   void dispose() {
     _passwordTextController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   void _togglePasswordVisibility() {
@@ -215,7 +221,9 @@ class _LoginPageState extends State<LoginPage> {
                                           );
                                         }
                                       } else {
-                                        print("user tidak terdaftar");
+                                        setState(() {
+                                          _errInfo = true;
+                                        });
                                       }
                                     }
                                   },
@@ -224,8 +232,7 @@ class _LoginPageState extends State<LoginPage> {
                                     foregroundColor: Colors.white,
                                     minimumSize: const Size(140.0, 45.0),
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          10), 
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                   ),
                                   child: const Text('Masuk'),
@@ -243,6 +250,17 @@ class _LoginPageState extends State<LoginPage> {
                               'Belum memiliki Akun? Daftar Akun Disini',
                               style: TextStyle(
                                 color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 15.0),
+                          Visibility(
+                            visible: _errInfo,
+                            child: const Text(
+                              "Email atau kata sandi Salah !",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
                               ),
                             ),
                           ),
