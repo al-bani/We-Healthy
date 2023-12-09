@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:we_healthy/screen/rekomendasi/rekomendasi_hari.dart';
 import 'package:we_healthy/screen/user_auth/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:we_healthy/screen/rekomendasi/data_fisik.dart';
+import 'package:we_healthy/screen/rekomendasi/rekomendasi.dart';
+import 'package:we_healthy/screen/rekomendasi/rekomendasi_makanan.dart';
+import 'package:we_healthy/screen/rekomendasi/rekomendasi_olahraga.dart';
+import 'package:we_healthy/screen/rekomendasi/rekomendasi_pilihan.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,8 +28,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'we healthy',
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: rekomendasiPilihan(),
     );
   }
 }
- 
