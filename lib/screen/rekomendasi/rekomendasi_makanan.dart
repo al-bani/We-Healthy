@@ -9,9 +9,9 @@ class rekomendasiMakanan extends StatefulWidget {
 
 class _rekomendasiMakananState extends State<rekomendasiMakanan> {
   List<String> gambar = [
-    'nasi.png',
-    'Ayam.png',
-    'pisang.png',
+    '/rekomendasi/makanan/nasi.png',
+    '/rekomendasi/makanan/Ayam.png',
+    '/rekomendasi/makanan/pisang.png',
   ];
 
   List<String> nama = [

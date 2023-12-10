@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:we_healthy/screen/rekomendasi/rekomendasi_hari.dart';
+import 'package:we_healthy/screen/splash_screen.dart';
 import 'package:we_healthy/screen/user_auth/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       title: 'we healthy',
       debugShowCheckedModeBanner: false,
-      home: rekomendasiPilihan(),
+      home: rekomendasiMakanan(),
     );
   }
 }

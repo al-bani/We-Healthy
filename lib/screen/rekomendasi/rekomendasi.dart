@@ -20,7 +20,7 @@ class _RekomendasiState extends State<Rekomendasi> {
     'Mengurangi kalori untuk menurunkan lemak tubuh.'
   ];
 
-  List<String> gambar = ['bulking.png', 'maintance.png', 'cutting.png'];
+  List<String> gambar = ['/rekomendasi/bulking.png', '/rekomendasi/maintance.png', '/rekomendasi/cutting.png'];
 
   @override
   Widget build(BuildContext context) {

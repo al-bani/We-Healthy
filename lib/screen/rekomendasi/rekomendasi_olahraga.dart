@@ -9,9 +9,9 @@ class rekomendasiOlahraga extends StatefulWidget {
 
 class _rekomendasiOlahragaState extends State<rekomendasiOlahraga> {
   List<String> gambar = [
-    'pushup.png',
-    'situp.png',
-    'pullup.png',
+    '/rekomendasi/olahraga/pushup.png',
+    '/rekomendasi/olahraga/situp.png',
+    '/rekomendasi/olahraga/pullup.png',
   ];
 
   List<String> nama = [
