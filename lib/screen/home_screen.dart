@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:we_healthy/utils/bottom_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -275,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                                 onPrimary: Colors.white
                               ),
                               onPressed: (){
-
+                                 Navigator.pushNamed(context, 'detail_bmi');
                               }, 
                               child: Text(
                                 'Detail'
@@ -370,7 +371,7 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsets.only(left: 130, right: 130)
                   ),
                   onPressed: (){
-
+                    Navigator.pushNamed(context, 'rekomendasi');
                   }, 
                   child: Text(
                     'Lihat Rekomendasi'
@@ -381,6 +382,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+       bottomNavigationBar: bottomNavigationBar(),
     );
   }
 }
+

@@ -235,6 +235,7 @@ class _LoginPageState extends State<LoginPage> {
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                   ),
+                                  
                                   child: const Text('Masuk'),
                                 ),
                           const SizedBox(height: 15.0),

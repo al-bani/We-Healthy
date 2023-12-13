@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:we_healthy/screen/rekomendasi/rekomendasi_hari.dart';
+import 'package:we_healthy/utils/app_bar.dart';
+import 'package:we_healthy/utils/bottom_bar.dart';
 
 class Rekomendasi extends StatefulWidget {
   const Rekomendasi({Key? key});
@@ -20,11 +23,12 @@ class _RekomendasiState extends State<Rekomendasi> {
     'Mengurangi kalori untuk menurunkan lemak tubuh.'
   ];
 
-  List<String> gambar = ['/rekomendasi/bulking.png', '/rekomendasi/maintance.png', '/rekomendasi/cutting.png'];
+  List<String> gambar = ['rekomendasi/bulking.png', 'rekomendasi/maintance.png', 'rekomendasi/cutting.png'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: MyAppBar(),
       backgroundColor: Color(0xFFE6E7EB),
       body: Padding(
         padding: const EdgeInsets.all(24),
@@ -34,15 +38,18 @@ class _RekomendasiState extends State<Rekomendasi> {
             if (index == 0) {
               return Card(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 20),
+                
                 child: Stack(
                   // mainAxisSize: MainAxisSize.min,
+                  
 
                   children: <Widget>[
                     Image.asset(
                       'gym.png',
-                      width: 380,
+                      width: double.infinity,
                       height: 200,
                       fit: BoxFit.fill,
+                      
                     ),
                     ListTile(
                       title: Text(
@@ -68,8 +75,15 @@ class _RekomendasiState extends State<Rekomendasi> {
               margin: EdgeInsets.fromLTRB(10, 0, 0, 20),
               // color: Colors.white,
               child: ListTile(
+                onTap: (){
+                   Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => rekomendasiHari(),
+                      ),
+                    );
+                },
                 leading: Image.asset(
-                  'assets/$img',
+                  '$img',
                   scale: 10,
                   fit: BoxFit.fitWidth,
                 ),
@@ -83,6 +97,7 @@ class _RekomendasiState extends State<Rekomendasi> {
           },
         ),
       ),
+      bottomNavigationBar: bottomNavigationBar(),
     );
   }
 }

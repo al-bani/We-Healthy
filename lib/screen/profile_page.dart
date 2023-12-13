@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:we_healthy/utils/app_bar.dart';
+import 'package:we_healthy/utils/bottom_bar.dart';
 
 const kTextFieldDecoration = InputDecoration(
   hintStyle: TextStyle(color: Colors.grey),
@@ -29,6 +31,15 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Center(
+          child: Image.asset(
+              '/logo/logo_blue.png' // Sesuaikan dengan tinggi yang diinginkan
+              ),
+        ),
+      ),
       body: Padding(
         padding: EdgeInsets.all(20),
         child: Column(
@@ -196,6 +207,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
+      bottomNavigationBar: bottomNavigationBar(),
     );
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:we_healthy/utils/app_bar.dart';
+import 'package:we_healthy/utils/bottom_bar.dart';
 
 class bmiDetail extends StatefulWidget {
   const bmiDetail({super.key});
@@ -11,6 +13,7 @@ class _bmiDetailState extends State<bmiDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: MyAppBar(),
       body: Padding(
         padding: EdgeInsets.all(24),
         child: SingleChildScrollView(
@@ -329,6 +332,7 @@ class _bmiDetailState extends State<bmiDetail> {
           ),
         ),
       ),
+      bottomNavigationBar: bottomNavigationBar(),
     );
   }
 }

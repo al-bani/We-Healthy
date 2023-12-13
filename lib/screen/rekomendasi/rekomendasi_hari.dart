@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:we_healthy/screen/rekomendasi/rekomendasi_pilihan.dart';
+import 'package:we_healthy/utils/app_bar.dart';
+import 'package:we_healthy/utils/bottom_bar.dart';
 
 class rekomendasiHari extends StatefulWidget {
   const rekomendasiHari({Key? key});
@@ -21,6 +24,7 @@ class _rekomendasiHariState extends State<rekomendasiHari> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: MyAppBar(),
       backgroundColor: Color(0xFFE6E7EB),
       body: Padding(
         padding: const EdgeInsets.all(24),
@@ -57,6 +61,13 @@ class _rekomendasiHariState extends State<rekomendasiHari> {
             return Card(
               margin: EdgeInsets.symmetric(horizontal: 0, vertical: 4),
               child: ListTile(
+                onTap: (){
+                   Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => rekomendasiPilihan(),
+                      ),
+                    );
+                },
                 leading: Icon(Icons.fitness_center),
                 title: Text(item),
               ),
@@ -64,6 +75,7 @@ class _rekomendasiHariState extends State<rekomendasiHari> {
           },
         ),
       ),
+      bottomNavigationBar: bottomNavigationBar(),
     );
   }
 }

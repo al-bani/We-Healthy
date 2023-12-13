@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:we_healthy/utils/app_bar.dart';
+import 'package:we_healthy/utils/bottom_bar.dart';
 
 class rekomendasiMakanan extends StatefulWidget {
   const rekomendasiMakanan({Key? key});
@@ -26,6 +28,7 @@ class _rekomendasiMakananState extends State<rekomendasiMakanan> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: MyAppBar(),
       backgroundColor: Color(0xFFE6E7EB),
       body: Container(
         child: Column(
@@ -80,6 +83,7 @@ class _rekomendasiMakananState extends State<rekomendasiMakanan> {
           ],
         ),
       ),
+      bottomNavigationBar: bottomNavigationBar(),
     );
   }
 }
