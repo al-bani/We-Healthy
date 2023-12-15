@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:we_healthy/utils/app_bar.dart';
 import 'package:we_healthy/utils/bottom_bar.dart';
 
-class rekomendasiMakanan extends StatefulWidget {
-  const rekomendasiMakanan({Key? key});
+class RekomendasiMakanan extends StatefulWidget {
+  const RekomendasiMakanan({Key? key});
 
   @override
-  State<rekomendasiMakanan> createState() => _rekomendasiMakananState();
+  State<RekomendasiMakanan> createState() => _RekomendasiMakananState();
 }
 
-class _rekomendasiMakananState extends State<rekomendasiMakanan> {
+class _RekomendasiMakananState extends State<RekomendasiMakanan> {
   List<String> gambar = [
     '/rekomendasi/makanan/nasi.png',
     '/rekomendasi/makanan/Ayam.png',
@@ -28,20 +27,34 @@ class _rekomendasiMakananState extends State<rekomendasiMakanan> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, 'rekomendasi_hari_makan');
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              size: 30,
+            )),
+        title: Image.asset(
+          'wehealty.png',
+          fit: BoxFit.contain,
+          height: 170,
+        ),
+      ),
       backgroundColor: Color(0xFFE6E7EB),
       body: Container(
         child: Column(
           children: <Widget>[
             Container(
               child: Card(
-                margin: EdgeInsets.symmetric(horizontal: 0, vertical: 30),
+                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
                 child: Stack(
                   alignment: Alignment.centerLeft,
                   children: <Widget>[
                     Image.asset(
                       'makanan.png',
-                      width: 380,
+                      width: double.infinity,
                       fit: BoxFit.fill,
                     ),
                     Padding(

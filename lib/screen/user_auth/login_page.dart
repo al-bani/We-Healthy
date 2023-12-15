@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:we_healthy/screen/data_fisik.dart';
 import 'package:we_healthy/screen/home_screen.dart';
 import 'package:we_healthy/screen/user_auth/pending_auth.dart';
 import 'package:we_healthy/screen/user_auth/register_page.dart';
+import 'package:we_healthy/services/etter_services.dart';
+import 'package:we_healthy/utils/config.dart';
 import 'package:we_healthy/utils/validator.dart';
 import 'package:we_healthy/utils/fire_auth.dart';
 
@@ -20,6 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   final _emailTextController = TextEditingController();
   final _focusEmail = FocusNode();
   final _focusPassword = FocusNode();
+  DataService ds = DataService();
 
   bool _isProcessing = false;
   bool _isPasswordVisible = false;
@@ -207,11 +213,31 @@ class _LoginPageState extends State<LoginPage> {
                                             await FireAuth.isEmailVerified(
                                                 user);
                                         if (_isVerified) {
-                                          Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(
-                                              builder: (context) => HomePage(),
-                                            ),
-                                          );
+                                          List userDataCheck = [];
+                                          userDataCheck = jsonDecode(
+                                              await ds.selectWhere(
+                                                  token,
+                                                  project,
+                                                  "user_data",
+                                                  appid,
+                                                  'user_id',
+                                                  user.uid));
+
+                                          if (userDataCheck.length == 0) {
+                                            print(userDataCheck);
+                                            Navigator.of(context)
+                                                .pushReplacement(
+                                              MaterialPageRoute(
+                                                builder: (context) => DataFisik(
+                                                  user: user,
+                                                ),
+                                              ),
+                                            );
+                                          } else {
+                                            Navigator.pushNamed(
+                                                context, 'home_screen',
+                                                arguments: user.uid);
+                                          }
                                         } else {
                                           Navigator.of(context).pushReplacement(
                                             MaterialPageRoute(
@@ -235,7 +261,6 @@ class _LoginPageState extends State<LoginPage> {
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                   ),
-                                  
                                   child: const Text('Masuk'),
                                 ),
                           const SizedBox(height: 15.0),

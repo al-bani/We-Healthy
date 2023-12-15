@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:we_healthy/screen/rekomendasi/rekomendasi_pilihan.dart';
-import 'package:we_healthy/utils/app_bar.dart';
 import 'package:we_healthy/utils/bottom_bar.dart';
 
-class rekomendasiHari extends StatefulWidget {
-  const rekomendasiHari({Key? key});
+class RekomendasiHariMakanan extends StatefulWidget {
+  const RekomendasiHariMakanan({Key? key});
 
   @override
-  State<rekomendasiHari> createState() => _rekomendasiHariState();
+  State<RekomendasiHariMakanan> createState() => _RekomendasiHariMakananState();
 }
 
-class _rekomendasiHariState extends State<rekomendasiHari> {
+class _RekomendasiHariMakananState extends State<RekomendasiHariMakanan> {
   List<String> hari = [
     'Hari 1',
     'Hari 2',
@@ -24,7 +22,21 @@ class _rekomendasiHariState extends State<rekomendasiHari> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, 'rekomendasi_pilihan');
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              size: 30,
+            )),
+        title: Image.asset(
+          'wehealty.png',
+          fit: BoxFit.contain,
+          height: 170,
+        ),
+      ),
       backgroundColor: Color(0xFFE6E7EB),
       body: Padding(
         padding: const EdgeInsets.all(24),
@@ -38,18 +50,8 @@ class _rekomendasiHariState extends State<rekomendasiHari> {
                   children: <Widget>[
                     Image.asset(
                       'fotohari.png',
-                      width: 380,
+                      width: double.infinity,
                       fit: BoxFit.fill,
-                    ),
-                    ListTile(
-                      title: Text(
-                        'Tips & Trick',
-                        style: TextStyle(fontSize: 26, color: Colors.orange),
-                      ),
-                      subtitle: Text(
-                        'Makanlah makanan sehat dengan variasi nutrisi dan atur workout secara teratur untuk mencapai keseimbangan tubuh yang optimal.',
-                        style: TextStyle(color: Colors.orangeAccent),
-                      ),
                     ),
                   ],
                 ),
@@ -61,15 +63,15 @@ class _rekomendasiHariState extends State<rekomendasiHari> {
             return Card(
               margin: EdgeInsets.symmetric(horizontal: 0, vertical: 4),
               child: ListTile(
-                onTap: (){
-                   Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => rekomendasiPilihan(),
-                      ),
-                    );
+                contentPadding: EdgeInsets.fromLTRB(40, 20, 10, 20),
+                onTap: () {
+                  Navigator.pushNamed(context, 'rekomendasi_makanan');
                 },
                 leading: Icon(Icons.fitness_center),
-                title: Text(item),
+                title: Text(
+                  item,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                ),
               ),
             );
           },

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:we_healthy/utils/app_bar.dart';
 import 'package:we_healthy/utils/bottom_bar.dart';
 
 const kTextFieldDecoration = InputDecoration(

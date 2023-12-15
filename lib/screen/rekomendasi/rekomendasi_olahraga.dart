@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:we_healthy/utils/app_bar.dart';
 import 'package:we_healthy/utils/bottom_bar.dart';
 
-class rekomendasiOlahraga extends StatefulWidget {
-  const rekomendasiOlahraga({Key? key});
+class RekomendasiOlahraga extends StatefulWidget {
+  const RekomendasiOlahraga({Key? key});
 
   @override
-  State<rekomendasiOlahraga> createState() => _rekomendasiOlahragaState();
+  State<RekomendasiOlahraga> createState() => _RekomendasiOlahragaState();
 }
 
-class _rekomendasiOlahragaState extends State<rekomendasiOlahraga> {
+class _RekomendasiOlahragaState extends State<RekomendasiOlahraga> {
   List<String> gambar = [
     '/rekomendasi/olahraga/pushup.png',
     '/rekomendasi/olahraga/situp.png',
@@ -28,20 +27,34 @@ class _rekomendasiOlahragaState extends State<rekomendasiOlahraga> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, 'rekomendasi_hari_olahraga');
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              size: 30,
+            )),
+        title: Image.asset(
+          'wehealty.png',
+          fit: BoxFit.contain,
+          height: 170,
+        ),
+      ),
       backgroundColor: Color(0xFFE6E7EB),
       body: Container(
         child: Column(
           children: <Widget>[
             Container(
               child: Card(
-                margin: EdgeInsets.symmetric(horizontal: 0, vertical: 30),
+                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
                 child: Stack(
                   alignment: Alignment.centerLeft,
                   children: <Widget>[
                     Image.asset(
                       'Olahraga.png',
-                      width: 380,
+                      width: double.infinity,
                       fit: BoxFit.fill,
                     ),
                     Padding(

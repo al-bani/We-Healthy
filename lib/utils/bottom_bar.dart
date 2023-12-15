@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:we_healthy/screen/home_screen.dart';
 import 'package:we_healthy/screen/profile_page.dart';

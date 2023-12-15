@@ -1,19 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:we_healthy/utils/app_bar.dart';
 import 'package:we_healthy/utils/bottom_bar.dart';
 
-class bmiDetail extends StatefulWidget {
-  const bmiDetail({super.key});
+class BmiDetail extends StatefulWidget {
+  const BmiDetail({super.key});
 
   @override
-  State<bmiDetail> createState() => _bmiDetailState();
+  State<BmiDetail> createState() => _BmiDetailState();
 }
 
-class _bmiDetailState extends State<bmiDetail> {
+class _BmiDetailState extends State<BmiDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              size: 30,
+            )),
+        title: Image.asset(
+          'wehealty.png',
+          fit: BoxFit.contain,
+          height: 170,
+        ),
+      ),
       body: Padding(
         padding: EdgeInsets.all(24),
         child: SingleChildScrollView(
@@ -134,10 +147,8 @@ class _bmiDetailState extends State<bmiDetail> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-
                                   ],
                                 )),
-                            
                             Padding(
                                 padding: EdgeInsets.all(5),
                                 child: Column(
@@ -181,7 +192,6 @@ class _bmiDetailState extends State<bmiDetail> {
                           ],
                         ),
                       ),
-                     
                     ],
                   ),
                 ),
@@ -248,10 +258,8 @@ class _bmiDetailState extends State<bmiDetail> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-
                                   ],
                                 )),
-                            
                             Padding(
                                 padding: EdgeInsets.all(5),
                                 child: Column(
@@ -261,34 +269,34 @@ class _bmiDetailState extends State<bmiDetail> {
                                     Text(
                                       '1,770 calories per day',
                                       style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          ),
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     SizedBox(height: 10),
                                     Text(
                                       '2,028 calories per day',
                                       style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          ),
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     SizedBox(height: 10),
                                     Text(
                                       '2,286 calories per day',
                                       style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          ),
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     SizedBox(height: 10),
                                     Text(
                                       '2,544 calories per day',
                                       textAlign: TextAlign.right,
                                       style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                          ),
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     SizedBox(height: 10),
                                     Text(
@@ -296,15 +304,13 @@ class _bmiDetailState extends State<bmiDetail> {
                                       textAlign: TextAlign.right,
                                       style: TextStyle(
                                           fontSize: 15,
-                                          fontWeight: FontWeight.bold
-                                          ),
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 )),
                           ],
                         ),
                       ),
-                     
                     ],
                   ),
                 ),

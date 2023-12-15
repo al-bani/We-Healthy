@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:we_healthy/screen/rekomendasi/rekomendasi_hari.dart';
-import 'package:we_healthy/utils/app_bar.dart';
 import 'package:we_healthy/utils/bottom_bar.dart';
 
 class Rekomendasi extends StatefulWidget {
@@ -23,12 +21,30 @@ class _RekomendasiState extends State<Rekomendasi> {
     'Mengurangi kalori untuk menurunkan lemak tubuh.'
   ];
 
-  List<String> gambar = ['rekomendasi/bulking.png', 'rekomendasi/maintance.png', 'rekomendasi/cutting.png'];
+  List<String> gambar = [
+    'rekomendasi/bulking.png',
+    'rekomendasi/maintance.png',
+    'rekomendasi/cutting.png'
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, 'home_screen');
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              size: 30,
+            )),
+        title: Image.asset(
+          'wehealty.png',
+          fit: BoxFit.contain,
+          height: 170,
+        ),
+      ),
       backgroundColor: Color(0xFFE6E7EB),
       body: Padding(
         padding: const EdgeInsets.all(24),
@@ -38,28 +54,36 @@ class _RekomendasiState extends State<Rekomendasi> {
             if (index == 0) {
               return Card(
                 margin: EdgeInsets.fromLTRB(10, 0, 0, 20),
-                
                 child: Stack(
-                  // mainAxisSize: MainAxisSize.min,
-                  
-
                   children: <Widget>[
                     Image.asset(
                       'gym.png',
                       width: double.infinity,
                       height: 200,
                       fit: BoxFit.fill,
-                      
                     ),
                     ListTile(
-                      title: Text(
-                        'Tips & Trick',
-                        style: TextStyle(
-                            fontSize: 26, color: Colors.lightGreenAccent),
-                      ),
-                      subtitle: Text(
-                        'Makanlah makanan sehat dengan variasi nutrisi dan atur workout secara teratur untuk mencapai keseimbangan tubuh yang optimal.',
-                        style: TextStyle(color: Colors.white),
+                      title: new Center(
+                        child: Text(
+                          'Pilih tipe anda !',
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            shadows: <Shadow>[
+                              Shadow(
+                                offset: Offset(10.0, 10.0),
+                                blurRadius: 3.0,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                              ),
+                              Shadow(
+                                offset: Offset(10.0, 10.0),
+                                blurRadius: 8.0,
+                                color: Color.fromARGB(125, 0, 0, 255),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -73,14 +97,10 @@ class _RekomendasiState extends State<Rekomendasi> {
 
             return Card(
               margin: EdgeInsets.fromLTRB(10, 0, 0, 20),
-              // color: Colors.white,
               child: ListTile(
-                onTap: (){
-                   Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => rekomendasiHari(),
-                      ),
-                    );
+                contentPadding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+                onTap: () {
+                  Navigator.pushNamed(context, 'rekomendasi_pilihan');
                 },
                 leading: Image.asset(
                   '$img',
