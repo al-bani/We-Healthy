@@ -33,14 +33,16 @@ class _HomePageState extends State<HomePage> {
 
     tempData = jsonDecode(await ds.selectWhere(
         token, project, "user_data", appid, 'user_id', uid));
-    print(tempData);
-    checkUserData(tempData);
+
     _dataUser = tempData.map((e) => UserDataModel.fromJson(e)).toList();
     _calorieWeekly = double.parse(_dataUser[0].kalori_perhari) * 7;
   }
 
-  void checkUserData(List data) {
-    if (data.length == 1) {
+  void checkDataAPI(
+      String checkCondition, double checkCelcius, String checkLocation) {
+    if (checkCondition != "loading..." ||
+        checkCelcius != 0 ||
+        checkLocation != "loading...") {
       setState(() {
         loading = false;
       });
@@ -66,14 +68,15 @@ class _HomePageState extends State<HomePage> {
       }
       location = fetchedLocation;
       celcius = (fetchedKelvin - 273.15).roundToDouble();
+      checkDataAPI(weatherCondition, celcius, location);
     });
   }
 
   @override
   void initState() {
     super.initState();
-    fetchDataAPI();
     selectUserData();
+    fetchDataAPI();
   }
 
   @override
@@ -345,7 +348,9 @@ class _HomePageState extends State<HomePage> {
                                           onPrimary: Colors.white),
                                       onPressed: () {
                                         Navigator.pushNamed(
-                                            context, 'detail_bmi');
+                                          context,
+                                          'detail_bmi',
+                                        );
                                       },
                                       child: Text('Detail'))
                                 ],
@@ -385,7 +390,7 @@ class _HomePageState extends State<HomePage> {
                                         padding: EdgeInsets.all(10),
                                         child: ListTile(
                                           title: Text(
-                                            '${_dataUser[0].kalori_perhari}',
+                                            '${_dataUser[0].kalori_perhari} kcal',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontSize: 24,
@@ -406,7 +411,7 @@ class _HomePageState extends State<HomePage> {
                                         padding: EdgeInsets.all(10),
                                         child: ListTile(
                                           title: Text(
-                                            '$_calorieWeekly',
+                                            '$_calorieWeekly kcal',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontSize: 24,

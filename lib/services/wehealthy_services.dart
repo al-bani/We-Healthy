@@ -3,27 +3,25 @@ import 'dart:math';
 class WehealthyLogic {
   double bmi(double kg, double cm) {
     double? m = cm / 100;
-    double? nilai_bmi = kg / (pow(m, 2));
+    double? nilaiBmi = kg / (pow(m, 2));
 
-    print("2.1");
-    return nilai_bmi;
+    return nilaiBmi;
   }
 
   double bmr(String gender, int umur, double cm, double kg) {
-    double? nilai_bmr;
+    double? nilaiBmr;
 
     if (gender == "Pria") {
-      nilai_bmr = (10 * kg) + (6.25 * cm) - (5 * umur) + 5;
+      nilaiBmr = (10 * kg) + (6.25 * cm) - (5 * umur) + 5;
     } else {
-      nilai_bmr = (10 * kg) + (6.25 * cm) - (5 * umur) - 161;
+      nilaiBmr = (10 * kg) + (6.25 * cm) - (5 * umur) - 161;
     }
-    print("2.2");
-    return nilai_bmr;
+    return nilaiBmr;
   }
 
   double tdee(double bmr, double met) {
-    double? nilai_tdee = bmr * met;
-    print("2.3");
-    return nilai_tdee;
+    double? nilaiTdee = bmr * met;
+
+    return nilaiTdee;
   }
 }
