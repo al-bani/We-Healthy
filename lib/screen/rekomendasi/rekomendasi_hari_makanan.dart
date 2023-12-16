@@ -65,7 +65,13 @@ class _RekomendasiHariMakananState extends State<RekomendasiHariMakanan> {
               child: ListTile(
                 contentPadding: EdgeInsets.fromLTRB(40, 20, 10, 20),
                 onTap: () {
-                  Navigator.pushNamed(context, 'rekomendasi_makanan');
+                  Navigator.pushNamed(context, 'rekomendasi_makanan',
+                      arguments: {
+                        'periodisasi': '',
+                        'userID': '',
+                        'pilihan': 'makanan',
+                        'hari': item
+                      });
                 },
                 leading: Icon(Icons.fitness_center),
                 title: Text(

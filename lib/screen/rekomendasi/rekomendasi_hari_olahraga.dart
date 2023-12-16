@@ -66,7 +66,13 @@ class _RekomendasiHariOlahragaState extends State<RekomendasiHariOlahraga> {
               child: ListTile(
                 contentPadding: EdgeInsets.fromLTRB(40, 20, 10, 20),
                 onTap: () {
-                  Navigator.pushNamed(context, 'rekomendasi_olahraga');
+                  Navigator.pushNamed(context, 'rekomendasi_olahraga',
+                      arguments: {
+                        'periodisasi': '',
+                        'userID': '',
+                        'pilihan': 'olahraga',
+                        'hari': item
+                      });
                 },
                 leading: Icon(Icons.fitness_center),
                 title: Text(

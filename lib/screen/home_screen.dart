@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:we_healthy/models/user_model.dart';
 import 'package:we_healthy/services/etter_services.dart';
 import 'package:we_healthy/services/rest_api.dart';
+import 'package:we_healthy/services/wehealthy_services.dart';
 import 'package:we_healthy/utils/bottom_bar.dart';
 import 'package:we_healthy/utils/config.dart';
 
@@ -24,12 +25,17 @@ class _HomePageState extends State<HomePage> {
   List<UserDataModel> _dataUser = [];
   DataService ds = DataService();
   double _calorieWeekly = 0;
+  late String userId;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   void selectUserData() async {
     final User? user = auth.currentUser;
     String uid = user!.uid;
     List tempData = [];
+
+    setState(() {
+      userId = uid;
+    });
 
     tempData = jsonDecode(await ds.selectWhere(
         token, project, "user_data", appid, 'user_id', uid));
@@ -77,6 +83,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     selectUserData();
     fetchDataAPI();
+    rsa.fetchDataFood();
   }
 
   @override
@@ -441,7 +448,8 @@ class _HomePageState extends State<HomePage> {
                               onPrimary: Colors.black,
                               padding: EdgeInsets.only(left: 130, right: 130)),
                           onPressed: () {
-                            Navigator.pushNamed(context, 'rekomendasi');
+                            Navigator.pushNamed(context, 'rekomendasi',
+                                arguments: {'userId': userId});
                           },
                           child: Text('Lihat Rekomendasi'))
                     ],

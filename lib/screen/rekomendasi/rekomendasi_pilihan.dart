@@ -9,6 +9,7 @@ class RekomendasiPilihan extends StatefulWidget {
 }
 
 class _RekomendasiPilihanState extends State<RekomendasiPilihan> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +38,12 @@ class _RekomendasiPilihanState extends State<RekomendasiPilihan> {
               children: <Widget>[
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, 'rekomendasi_hari_olahraga');
+                    Navigator.pushNamed(context, 'rekomendasi_hari_makanan',
+                        arguments: {
+                          'periodisasi': '',
+                          'userID': '',
+                          'pilihan': 'makanan'
+                        });
                   },
                   child: Card(
                     child: Stack(
@@ -61,7 +67,12 @@ class _RekomendasiPilihanState extends State<RekomendasiPilihan> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, 'rekomendasi_hari_makan');
+                    Navigator.pushNamed(context, 'rekomendasi_hari_makanan',
+                        arguments: {
+                          'periodisasi': '',
+                          'userID': '',
+                          'pilihan': 'makanan'
+                        });
                   },
                   child: Card(
                     child: Stack(

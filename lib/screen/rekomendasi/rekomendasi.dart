@@ -2,18 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:we_healthy/utils/bottom_bar.dart';
 
 class Rekomendasi extends StatefulWidget {
-  const Rekomendasi({Key? key});
+  const Rekomendasi({super.key});
 
   @override
   State<Rekomendasi> createState() => _RekomendasiState();
 }
 
 class _RekomendasiState extends State<Rekomendasi> {
-  List<String> hari = [
-    'Bulking',
-    'Maintance',
-    'Cutting'
-  ]; // Perhatikan bahwa hari sebaiknya memiliki tipe data List<String>
+  List<String> periodisasi = ['Bulking', 'Maintance', 'Cutting'];
+  String userId = ' ';
 
   List<String> deskripsi = [
     'Meningkatkan kalori untuk membangun otot. blablablalba',
@@ -28,7 +25,19 @@ class _RekomendasiState extends State<Rekomendasi> {
   ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    setState(() {
+      Map<String, dynamic> args =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+      userId = args['userId'];
+    });
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -49,7 +58,8 @@ class _RekomendasiState extends State<Rekomendasi> {
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: ListView.builder(
-          itemCount: hari.length + 1, // Menambahkan 1 untuk Card Tips & Trick
+          itemCount:
+              periodisasi.length + 1, // Menambahkan 1 untuk Card Tips & Trick
           itemBuilder: (context, index) {
             if (index == 0) {
               return Card(
@@ -65,7 +75,7 @@ class _RekomendasiState extends State<Rekomendasi> {
                     ListTile(
                       title: new Center(
                         child: Text(
-                          'Pilih tipe anda !',
+                          "Pilih Tipe Anda !",
                           style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
@@ -91,7 +101,7 @@ class _RekomendasiState extends State<Rekomendasi> {
               );
             }
 
-            final item = hari[index - 1];
+            final item = periodisasi[index - 1];
             final desk = deskripsi[index - 1];
             final img = gambar[index - 1];
 
@@ -100,7 +110,8 @@ class _RekomendasiState extends State<Rekomendasi> {
               child: ListTile(
                 contentPadding: EdgeInsets.fromLTRB(20, 30, 20, 30),
                 onTap: () {
-                  Navigator.pushNamed(context, 'rekomendasi_pilihan');
+                  Navigator.pushNamed(context, 'rekomendasi_pilihan',
+                      arguments: {'periodisasi': item, 'userId': userId});
                 },
                 leading: Image.asset(
                   '$img',
