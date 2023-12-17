@@ -83,7 +83,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     selectUserData();
     fetchDataAPI();
-    rsa.fetchDataFood();
   }
 
   @override

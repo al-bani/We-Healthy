@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:we_healthy/screen/data_fisik.dart';
-import 'package:we_healthy/screen/home_screen.dart';
 import 'package:we_healthy/screen/user_auth/pending_auth.dart';
 import 'package:we_healthy/screen/user_auth/register_page.dart';
 import 'package:we_healthy/services/etter_services.dart';
@@ -214,6 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                                                 user);
                                         if (_isVerified) {
                                           List userDataCheck = [];
+                                          
                                           userDataCheck = jsonDecode(
                                               await ds.selectWhere(
                                                   token,

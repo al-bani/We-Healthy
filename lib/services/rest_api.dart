@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:http/http.dart' as http;
+import 'package:we_healthy/models/user_model.dart';
+import 'package:we_healthy/services/etter_services.dart';
 import 'package:we_healthy/services/wehealthy_services.dart';
 import 'dart:convert';
 import 'package:we_healthy/utils/config.dart';
@@ -7,6 +9,7 @@ import 'package:geolocator/geolocator.dart';
 
 class RestApi {
   late Random random = Random();
+  DataService ds = DataService();
 
   Future<List<double>> getLocationUser() async {
     List<double> _koorLocation = [];
@@ -108,7 +111,8 @@ class RestApi {
     return indexAqi = 0;
   }
 
-  Future<Map<String, dynamic>> fetchDataFood() async {
+  Future<Map<String, dynamic>> fetchDataFood(
+      String userId, String periodisasi) async {
     Map<String, dynamic> tempDataFood = await WehealthyLogic().foodList();
     Map<String, dynamic> nullReturn = {'null': true};
 
@@ -116,9 +120,28 @@ class RestApi {
     int randProteinIndex = random.nextInt(14);
     int randCarbsIndex = random.nextInt(14);
 
-    String foodFats = tempDataFood['fats'][randFatsIndex];
-    String foodProtein = tempDataFood['protein'][randProteinIndex];
-    String foodCarbs = tempDataFood['carbs'][randCarbsIndex];
+    List tempUserData = [];
+    List<UserDataModel> userData = [];
+    tempUserData = jsonDecode(await ds.selectWhere(
+        token, project, "user_data", appid, 'user_id', userId));
+
+    userData = tempUserData.map((e) => UserDataModel.fromJson(e)).toList();
+
+    double calorie = double.parse(userData[0].kalori_perhari);
+
+    List<double> totalGram =
+        WehealthyLogic().caloriesCalc(calorie, periodisasi);
+
+    String gramFat = totalGram[0].toString();
+    String gramCarb = totalGram[1].toString();
+    String gramProt = totalGram[2].toString();
+
+    print(totalGram);
+
+    String foodFats = gramFat + "g ${tempDataFood['fats'][randFatsIndex]}";
+    String foodProtein =
+        gramCarb + "g ${tempDataFood['protein'][randProteinIndex]}";
+    String foodCarbs = gramProt + "g ${tempDataFood['carbs'][randCarbsIndex]}";
 
     String apiUrlForFats =
         "https://api.api-ninjas.com/v1/nutrition?query=$foodFats&X-Api-Key=$apiKeyNinjas";

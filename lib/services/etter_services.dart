@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings, non_constant_identifier_names
+
 import 'package:http/http.dart' as http;
 
 class DataService {
@@ -38,7 +40,149 @@ class DataService {
         return '[]';
       }
     } catch (e) {
-      print(e);
+      // Print error here
+      return '[]';
+    }
+  }
+
+  Future insertCarbs(String appid, String user_id, String nama_makanan,
+      String jumlah_sajian, String kalori, String hari) async {
+    String uri = 'https://io.etter.cloud/v4/insert';
+
+    try {
+      final response = await http.post(Uri.parse(uri), body: {
+        'token': '65740448c735f28b8b45eda9',
+        'project': 'db_we_healthy',
+        'collection': 'carbs',
+        'appid': appid,
+        'user_id': user_id,
+        'nama_makanan': nama_makanan,
+        'jumlah_sajian': jumlah_sajian,
+        'kalori': kalori,
+        'hari': hari
+      });
+
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        // Return an empty array
+        return '[]';
+      }
+    } catch (e) {
+      // Print error here
+      return '[]';
+    }
+  }
+
+  Future insertProtein(String appid, String user_id, String nama_makanan,
+      String jumlah_sajian, String kalori, String hari) async {
+    String uri = 'https://io.etter.cloud/v4/insert';
+
+    try {
+      final response = await http.post(Uri.parse(uri), body: {
+        'token': '65740448c735f28b8b45eda9',
+        'project': 'db_we_healthy',
+        'collection': 'protein',
+        'appid': appid,
+        'user_id': user_id,
+        'nama_makanan': nama_makanan,
+        'jumlah_sajian': jumlah_sajian,
+        'kalori': kalori,
+        'hari': hari
+      });
+
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        // Return an empty array
+        return '[]';
+      }
+    } catch (e) {
+      // Print error here
+      return '[]';
+    }
+  }
+
+  Future insertFat(String appid, String user_id, String nama_makanan,
+      String jumlah_sajian, String kalori, String hari) async {
+    String uri = 'https://io.etter.cloud/v4/insert';
+
+    try {
+      final response = await http.post(Uri.parse(uri), body: {
+        'token': '65740448c735f28b8b45eda9',
+        'project': 'db_we_healthy',
+        'collection': 'fat',
+        'appid': appid,
+        'user_id': user_id,
+        'nama_makanan': nama_makanan,
+        'jumlah_sajian': jumlah_sajian,
+        'kalori': kalori,
+        'hari': hari
+      });
+
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        // Return an empty array
+        return '[]';
+      }
+    } catch (e) {
+      // Print error here
+      return '[]';
+    }
+  }
+
+  Future insertListMakanan(
+      String appid, String karbohidrat, String protein, String lemak) async {
+    String uri = 'https://io.etter.cloud/v4/insert';
+
+    try {
+      final response = await http.post(Uri.parse(uri), body: {
+        'token': '65740448c735f28b8b45eda9',
+        'project': 'db_we_healthy',
+        'collection': 'list_makanan',
+        'appid': appid,
+        'karbohidrat': karbohidrat,
+        'protein': protein,
+        'lemak': lemak
+      });
+
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        // Return an empty array
+        return '[]';
+      }
+    } catch (e) {
+      // Print error here
+      return '[]';
+    }
+  }
+
+  Future insertListWorkout(String appid, String hari, String nama_workout,
+      String repetisi, String kalori) async {
+    String uri = 'https://io.etter.cloud/v4/insert';
+
+    try {
+      final response = await http.post(Uri.parse(uri), body: {
+        'token': '65740448c735f28b8b45eda9',
+        'project': 'db_we_healthy',
+        'collection': 'list_workout',
+        'appid': appid,
+        'hari': hari,
+        'nama_workout': nama_workout,
+        'repetisi': repetisi,
+        'kalori': kalori
+      });
+
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        // Return an empty array
+        return '[]';
+      }
+    } catch (e) {
+      // Print error here
       return '[]';
     }
   }
