@@ -105,100 +105,104 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
               ),
             ),
             backgroundColor: Color(0xFFE6E7EB),
-            body: Container(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    child: Card(
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                      child: Stack(
-                        alignment: Alignment.centerLeft,
-                        children: <Widget>[
-                          Image.asset(
+            body: Padding(
+              padding: EdgeInsets.all(20),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12.0),
+                          child: Image.asset(
                             'makanan.png',
                             width: double.infinity,
                             fit: BoxFit.fill,
+                            height: 200,
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 8), // Adjust padding as needed
-                            child: Text(
-                              'Makanan',
-                              style: TextStyle(
-                                fontSize: 34,
-                                color: Colors.white,
+                        ),
+                        Text(
+                          "Total Kalori Anda 1288 kcal",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            shadows: <Shadow>[
+                              Shadow(
+                                offset: Offset(5, 5),
+                                blurRadius: 1.0,
+                                color: Color.fromARGB(255, 0, 0, 0),
                               ),
+                              Shadow(
+                                offset: Offset(1, 1),
+                                blurRadius: 5.0,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 40),
+                    Card(
+                      child: ExpansionTile(
+                        title: Text('Karbohidrat: 30%'),
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(2, 5, 0, 5),
+                            child: ListTile(
+                              title: Text(
+                                  '${carbsList[0].nama_makanan}: ${carbsList[0].jumlah_sajian}g'),
+                              leading: CircleAvatar(
+                                backgroundImage: AssetImage('icon.png'),
+                              ),
+                              subtitle: Text('${carbsList[0].kalori} kcal'),
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: carbsList.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-                          child: ListTile(
-                            leading: Image.asset('${gambar[index]}'),
-                            title: Text(carbsList[0].nama_makanan),
-                            subtitle:
-                                Text('Sajian: ${carbsList[0].jumlah_sajian}'),
-                            trailing: Text(
-                              '${carbsList[0].kalori} Kal',
-                              style: TextStyle(fontSize: 14),
+                    const SizedBox(height: 5),
+                    Card(
+                      child: ExpansionTile(
+                        title: Text('Protein: 30%'),
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(2, 5, 0, 5),
+                            child: ListTile(
+                              title: Text(
+                                  '${proteinList[0].nama_makanan}: ${proteinList[0].jumlah_sajian}g'),
+                              leading: CircleAvatar(
+                                backgroundImage: AssetImage('icon.png'),
+                              ),
+                              subtitle: Text('${proteinList[0].kalori} kcal'),
                             ),
                           ),
-                        );
-                      },
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: fatsList.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-                          child: ListTile(
-                            leading: Image.asset('${gambar[index]}'),
-                            title: Text(fatsList[0].nama_makanan),
-                            subtitle:
-                                Text('Sajian: ${fatsList[0].jumlah_sajian}'),
-                            trailing: Text(
-                              '${fatsList[0].kalori} Kal',
-                              style: TextStyle(fontSize: 14),
+                    const SizedBox(height: 5),
+                    Card(
+                      child: ExpansionTile(
+                        title: Text('Lemak: 30%'),
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(2, 5, 0, 5),
+                            child: ListTile(
+                              title: Text(
+                                  '${fatsList[0].nama_makanan}: ${fatsList[0].jumlah_sajian}g'),
+                              leading: CircleAvatar(
+                                backgroundImage: AssetImage('icon.png'),
+                              ),
+                              subtitle: Text('${fatsList[0].kalori} kcal'),
                             ),
                           ),
-                        );
-                      },
+                        ],
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: proteinList.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-                          child: ListTile(
-                            leading: Image.asset('${gambar[index]}'),
-                            title: Text(proteinList[0].nama_makanan),
-                            subtitle:
-                                Text('Sajian: ${proteinList[0].jumlah_sajian}'),
-                            trailing: Text(
-                              '${proteinList[0].kalori} Kal',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             bottomNavigationBar: bottomNavigationBar(),

@@ -21,7 +21,6 @@ class _RekomendasiHariMakananState extends State<RekomendasiHariMakanan> {
 
   Future<int> statusInsertedFood(
       String userId, String day, String periodisasi) async {
-    
     int status = await whl.insertFood(userId, day, periodisasi);
 
     if (status == 1) {
@@ -33,14 +32,14 @@ class _RekomendasiHariMakananState extends State<RekomendasiHariMakanan> {
 
   Future<int> checkingFoodUser(String userId, String item) async {
     List tempUserFood = [];
-    List<NutriensModel> tempCheckingFoodUser = [];
+    List<NutriensModel> tempCheckingFood = [];
 
     tempUserFood = jsonDecode(await ds.selectWhere(
         token, project, 'carbs', appid, 'user_id', userId));
-    tempCheckingFoodUser =
+    tempCheckingFood =
         tempUserFood.map((e) => NutriensModel.fromJson(e)).toList();
 
-    if (tempCheckingFoodUser[0].hari == item) {
+    if (tempCheckingFood.any((element) => element.hari == item)) {
       return 1;
     }
 
@@ -110,10 +109,9 @@ class _RekomendasiHariMakananState extends State<RekomendasiHariMakanan> {
                           'pilihan': 'makanan',
                           'hari': item
                         });
-                  } else {
+                  } else if (statusChecking == 0) {
                     int statusInserted = await statusInsertedFood(
                         args['userId'], item, args['periodisasi']);
-                    print("status inserted $statusInserted");
 
                     if (statusInserted == 1) {
                       Navigator.pushNamed(context, 'rekomendasi_makanan',

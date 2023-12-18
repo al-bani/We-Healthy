@@ -67,8 +67,8 @@ class RestApi {
     return location = '-';
   }
 
-  Future<double> getCurrentWeather() async {
-    late double? kelvin;
+  Future<List<double>> getCurrentWeather() async {
+    late List<double> weatherData = [];
     List<double> koordinat = await getLocationUser();
     double latitude = koordinat[0];
     double longitude = koordinat[1];
@@ -80,13 +80,17 @@ class RestApi {
 
       if (response.statusCode == 200) {
         final decodedData = json.decode(response.body);
-        kelvin = decodedData['main']['temp'];
-        print(kelvin);
-        return kelvin!;
-      } else {}
-    } catch (e) {}
 
-    return kelvin = 0;
+        weatherData.add(decodedData['main']['temp']);
+        weatherData.add(decodedData['weather'][0]['id']);
+
+        return weatherData;
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    return [];
   }
 
   Future<int> getAirPollution() async {

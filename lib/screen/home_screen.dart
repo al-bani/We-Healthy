@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:we_healthy/models/user_model.dart';
 import 'package:we_healthy/services/etter_services.dart';
 import 'package:we_healthy/services/rest_api.dart';
-import 'package:we_healthy/services/wehealthy_services.dart';
 import 'package:we_healthy/utils/bottom_bar.dart';
 import 'package:we_healthy/utils/config.dart';
 
@@ -27,6 +27,29 @@ class _HomePageState extends State<HomePage> {
   double _calorieWeekly = 0;
   late String userId;
   final FirebaseAuth auth = FirebaseAuth.instance;
+  String weather = 'loading...';
+
+  String setImageWeather(double code) {
+    switch (code) {
+      case >= 200 && < 300:
+        return 'hujan petir.png';
+
+      case >= 300 && < 400:
+        return 'hujan.png';
+
+      case >= 500 && < 600:
+        return 'hujan.png';
+
+      case == 800:
+        return 'cerah.png';
+
+      case > 800 && <= 804:
+        return 'berawan.png';
+
+      default:
+        return 'default.png';
+    }
+  }
 
   void selectUserData() async {
     final User? user = auth.currentUser;
@@ -44,11 +67,12 @@ class _HomePageState extends State<HomePage> {
     _calorieWeekly = double.parse(_dataUser[0].kalori_perhari) * 7;
   }
 
-  void checkDataAPI(
-      String checkCondition, double checkCelcius, String checkLocation) {
+  void checkDataAPI(String checkCondition, double checkCelcius,
+      String checkLocation, String checkWeather) {
     if (checkCondition != "loading..." ||
         checkCelcius != 0 ||
-        checkLocation != "loading...") {
+        checkLocation != "loading..." ||
+        checkWeather != "loading...") {
       setState(() {
         loading = false;
       });
@@ -58,9 +82,13 @@ class _HomePageState extends State<HomePage> {
   Future<void> fetchDataAPI() async {
     String fetchedLocation = await rsa.getCurrentLocationUser();
     int fetchedIndexAqi = await rsa.getAirPollution();
-    double fetchedKelvin = await rsa.getCurrentWeather();
+    List<double> weatherData = await rsa.getCurrentWeather();
+
+    double fetchedKelvin = weatherData[0];
+    double fetchedWeatherCode = weatherData[1];
 
     setState(() {
+      weather = setImageWeather(fetchedWeatherCode);
       if (fetchedIndexAqi == 1) {
         weatherCondition = "Baik";
       } else if (fetchedIndexAqi == 2) {
@@ -74,13 +102,43 @@ class _HomePageState extends State<HomePage> {
       }
       location = fetchedLocation;
       celcius = (fetchedKelvin - 273.15).roundToDouble();
-      checkDataAPI(weatherCondition, celcius, location);
+      checkDataAPI(weatherCondition, celcius, location, weather);
     });
+  }
+
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
   }
 
   @override
   void initState() {
     super.initState();
+    _handleLocationPermission();
     selectUserData();
     fetchDataAPI();
   }
@@ -113,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(10.0),
                               image: DecorationImage(
                                 image: AssetImage(
-                                    '/cuaca/sun.png'), // Ganti dengan path gambar Anda
+                                    '/cuaca/$weather'), // Ganti dengan path gambar Anda
                                 fit: BoxFit
                                     .cover, // Sesuaikan dengan preferensi desain Anda
                               ),
@@ -323,11 +381,26 @@ class _HomePageState extends State<HomePage> {
                                   width: 100,
                                   height: 100,
                                   alignment: Alignment.center,
-                                  child: Text(
-                                    "${_dataUser[0].kategori_berat}",
-                                    style: TextStyle(
-                                      fontSize: 32.0,
-                                      fontWeight: FontWeight.bold,
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Kategori",
+                                          style: TextStyle(
+                                            fontSize: 15.0,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                        Text(
+                                          "${_dataUser[0].kategori_berat}",
+                                          style: TextStyle(
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   decoration: BoxDecoration(

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:we_healthy/utils/bottom_bar.dart';
 
 class RekomendasiHariOlahraga extends StatefulWidget {
-  const RekomendasiHariOlahraga({Key? key});
+  const RekomendasiHariOlahraga({super.key});
 
   @override
   State<RekomendasiHariOlahraga> createState() =>
@@ -10,23 +11,22 @@ class RekomendasiHariOlahraga extends StatefulWidget {
 }
 
 class _RekomendasiHariOlahragaState extends State<RekomendasiHariOlahraga> {
-  List<String> hari = [
-    'Hari 1',
-    'Hari 2',
-    'Hari 3',
-    'Hari 4',
-    'Hari 5',
-    'Hari 6',
-    'Hari 7'
-  ]; // Perhatikan bahwa hari sebaiknya memiliki tipe data List<String>
+  List<String> hari = ['1', '2', '3', '4', '5', '6', '7'];
 
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic> args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, 'rekomendasi_pilihan');
+              Navigator.pushNamed(context, 'rekomendasi_pilihan', arguments: {
+                'periodisasi': args['periodisasi'],
+                'userId': args['userId'],
+                'pilihan': 'olahraga'
+              });
             },
             icon: Icon(
               Icons.arrow_back,
@@ -68,8 +68,8 @@ class _RekomendasiHariOlahragaState extends State<RekomendasiHariOlahraga> {
                 onTap: () {
                   Navigator.pushNamed(context, 'rekomendasi_olahraga',
                       arguments: {
-                        'periodisasi': '',
-                        'userID': '',
+                        'periodisasi': args['periodisasi'],
+                        'userId': args['userId'],
                         'pilihan': 'olahraga',
                         'hari': item
                       });

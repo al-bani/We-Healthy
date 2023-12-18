@@ -129,4 +129,5 @@ class WehealthyLogic {
 
     return caloriesNeeded;
   }
+
 }
