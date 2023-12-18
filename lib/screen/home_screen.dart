@@ -28,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   late String userId;
   final FirebaseAuth auth = FirebaseAuth.instance;
   String weather = 'loading...';
+  String airPolution = 'loading...';
 
   String setImageWeather(double code) {
     switch (code) {
@@ -68,11 +69,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void checkDataAPI(String checkCondition, double checkCelcius,
-      String checkLocation, String checkWeather) {
+      String checkLocation, String checkWeather, String checkAirPol) {
     if (checkCondition != "loading..." ||
         checkCelcius != 0 ||
         checkLocation != "loading..." ||
-        checkWeather != "loading...") {
+        checkWeather != "loading..." ||
+        checkAirPol != 'loading...') {
       setState(() {
         loading = false;
       });
@@ -91,18 +93,23 @@ class _HomePageState extends State<HomePage> {
       weather = setImageWeather(fetchedWeatherCode);
       if (fetchedIndexAqi == 1) {
         weatherCondition = "Baik";
+        airPolution = '1.png';
       } else if (fetchedIndexAqi == 2) {
         weatherCondition = "Cukup baik";
+        airPolution = '2.png';
       } else if (fetchedIndexAqi == 3) {
+        airPolution = '3.png';
         weatherCondition = "Sedang";
       } else if (fetchedIndexAqi == 4) {
+        airPolution = '4.png';
         weatherCondition = "Buruk";
       } else if (fetchedIndexAqi == 5) {
+        airPolution = '5.png';
         weatherCondition = "Sangat Buruk";
       }
       location = fetchedLocation;
       celcius = (fetchedKelvin - 273.15).roundToDouble();
-      checkDataAPI(weatherCondition, celcius, location, weather);
+      checkDataAPI(weatherCondition, celcius, location, weather, airPolution);
     });
   }
 
@@ -181,6 +188,8 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Expanded(
                                       child: Column(
@@ -249,10 +258,10 @@ class _HomePageState extends State<HomePage> {
                                     Expanded(
                                         child: Padding(
                                       padding: EdgeInsets.all(0),
-                                      child: const Icon(
-                                        Icons.dangerous,
-                                        size: 100,
-                                        color: Colors.red,
+                                      child: Image.asset(
+                                        '/udara/$airPolution',
+                                        width: 100,
+                                        height: 150,
                                       ),
                                     )),
                                   ],
