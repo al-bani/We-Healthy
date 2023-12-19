@@ -81,33 +81,33 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
       hari = args['hari'];
     });
 
-    return loading
-        ? const CircularProgressIndicator()
-        : Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'rekomendasi_hari_makan',
-                        arguments: {
-                          'periodisasi': args['periodisasi'],
-                          'userId': args['userId'],
-                          'pilihan': 'makanan'
-                        });
-                  },
-                  icon: Icon(
-                    Icons.arrow_back,
-                    size: 30,
-                  )),
-              title: Image.asset(
-                'wehealty.png',
-                fit: BoxFit.contain,
-                height: 170,
-              ),
-            ),
-            backgroundColor: Color(0xFFE6E7EB),
-            body: Padding(
-              padding: EdgeInsets.all(20),
-              child: SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, 'rekomendasi_hari_makan',
+                  arguments: {
+                    'periodisasi': args['periodisasi'],
+                    'userId': args['userId'],
+                    'pilihan': 'makanan'
+                  });
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              size: 30,
+            )),
+        title: Image.asset(
+          'wehealty.png',
+          fit: BoxFit.contain,
+          height: 170,
+        ),
+      ),
+      backgroundColor: Color(0xFFE6E7EB),
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: loading
+            ? Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
                     Stack(
@@ -204,8 +204,8 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
                   ],
                 ),
               ),
-            ),
-            bottomNavigationBar: bottomNavigationBar(),
-          );
+      ),
+      bottomNavigationBar: bottomNavigationBar(),
+    );
   }
 }

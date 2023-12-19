@@ -75,34 +75,37 @@ class _RekomendasiOlahragaState extends State<RekomendasiOlahraga> {
       day = args['hari'];
     });
 
-    return _loading
-        ? const CircularProgressIndicator()
-        : Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'rekomendasi_hari_olahraga',
-                        arguments: {
-                          'periodisasi': args['periodisasi'],
-                          'userId': args['userId'],
-                          'pilihan': 'olahraga'
-                        });
-                  },
-                  icon: Icon(
-                    Icons.arrow_back,
-                    size: 30,
-                  )),
-              title: Image.asset(
-                'wehealty.png',
-                fit: BoxFit.contain,
-                height: 170,
-              ),
-            ),
-            backgroundColor: Color(0xFFE6E7EB),
-            body: Container(
-              child: Column(
-                children: <Widget>[
-                  Container(
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, 'rekomendasi_hari_olahraga',
+                  arguments: {
+                    'periodisasi': args['periodisasi'],
+                    'userId': args['userId'],
+                    'pilihan': 'olahraga'
+                  });
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              size: 30,
+            )),
+        title: Image.asset(
+          'wehealty.png',
+          fit: BoxFit.contain,
+          height: 170,
+        ),
+      ),
+      backgroundColor: Color(0xFFE6E7EB),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _loading
+                ? Padding(
+                    padding: EdgeInsets.fromLTRB(0, 200, 0, 0),
+                    child: CircularProgressIndicator())
+                : Container(
                     child: Card(
                       margin:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 30),
@@ -129,32 +132,31 @@ class _RekomendasiOlahragaState extends State<RekomendasiOlahraga> {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: nama.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 25, vertical: 4),
-                          child: ListTile(
-                            leading: Image.asset('${gambar[index]}'),
-                            title: Text('${nama[index]}'),
-                            subtitle: Text('Repetisi: ${repetisi[index]}'),
-                            trailing: Text(
-                              '${kalori[index]} Kal',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                            // title: Text('Sajian: ${sajian[index]}'),
-                            // subtitle: Text('Kalori: ${kalori[index]}'),
-                          ),
-                        );
-                      },
+            Expanded(
+              child: ListView.builder(
+                itemCount: nama.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    margin: EdgeInsets.symmetric(horizontal: 25, vertical: 4),
+                    child: ListTile(
+                      leading: Image.asset('${gambar[index]}'),
+                      title: Text('${nama[index]}'),
+                      subtitle: Text('Repetisi: ${repetisi[index]}'),
+                      trailing: Text(
+                        '${kalori[index]} Kal',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      // title: Text('Sajian: ${sajian[index]}'),
+                      // subtitle: Text('Kalori: ${kalori[index]}'),
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
-            bottomNavigationBar: bottomNavigationBar(),
-          );
+          ],
+        ),
+      ),
+      bottomNavigationBar: bottomNavigationBar(),
+    );
   }
 }
