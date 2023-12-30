@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'package:we_healthy/models/user_model.dart';
 import 'package:we_healthy/services/etter_services.dart';
 import 'package:we_healthy/services/rest_api.dart';
@@ -10,7 +11,7 @@ import 'package:we_healthy/utils/bottom_bar.dart';
 import 'package:we_healthy/utils/config.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -24,10 +25,11 @@ class _HomePageState extends State<HomePage> {
   RestApi rsa = RestApi();
   List<UserDataModel> _dataUser = [];
   DataService ds = DataService();
-  double _calorieWeekly = 0;
-  late String userId;
+  String _calorieWeekly = ' ';
+  String userId = 'null hehe';
   final FirebaseAuth auth = FirebaseAuth.instance;
   String weather = 'loading...';
+  String caloriePerDay = ' ';
   String airPolution = 'loading...';
 
   String setImageWeather(double code) {
@@ -53,19 +55,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   void selectUserData() async {
-    final User? user = auth.currentUser;
-    String uid = user!.uid;
+    await Future.delayed(Duration(seconds: 3));
     List tempData = [];
 
-    setState(() {
-      userId = uid;
-    });
-
     tempData = jsonDecode(await ds.selectWhere(
-        token, project, "user_data", appid, 'user_id', uid));
+        token, project, "user_data", appid, 'user_id', userId));
 
     _dataUser = tempData.map((e) => UserDataModel.fromJson(e)).toList();
-    _calorieWeekly = double.parse(_dataUser[0].kalori_perhari) * 7;
+
+    int tempCalorie = int.parse(_dataUser[0].kalori_perhari);
+    _calorieWeekly = NumberFormat("#,##0.###").format(tempCalorie * 7);
+    caloriePerDay = NumberFormat("#,##0.###").format(tempCalorie);
   }
 
   void checkDataAPI(String checkCondition, double checkCelcius,
@@ -145,21 +145,27 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
     _handleLocationPermission();
-    selectUserData();
     fetchDataAPI();
+    selectUserData();
   }
 
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic> args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    setState(() {
+      userId = args['userId'];
+    });
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        automaticallyImplyLeading: false,
         title: Center(
-          child: Image.asset(
-              '/logo/logo_blue.png' // Sesuaikan dengan tinggi yang diinginkan
-              ),
+          child: Image.asset('/logo/logo_blue.png'),
         ),
       ),
       body: Center(
@@ -491,7 +497,7 @@ class _HomePageState extends State<HomePage> {
                                                 padding: EdgeInsets.all(10),
                                                 child: ListTile(
                                                   title: Text(
-                                                    '${_dataUser[0].kalori_perhari} kcal',
+                                                    '$caloriePerDay kcal',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontSize: 24,
@@ -556,7 +562,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      bottomNavigationBar: bottomNavigationBar(),
+      bottomNavigationBar: bottomNavigationBar(userId: userId),
     );
   }
 }

@@ -76,5 +76,4 @@ class FireAuth {
 
     return false;
   }
-
 }

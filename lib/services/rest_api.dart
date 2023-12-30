@@ -121,7 +121,7 @@ class RestApi {
     Map<String, dynamic> nullReturn = {'null': true};
 
     int randFatsIndex = random.nextInt(14);
-    int randProteinIndex = random.nextInt(14);
+    int randProtIndex = random.nextInt(14);
     int randCarbsIndex = random.nextInt(14);
 
     List tempUserData = [];
@@ -140,53 +140,42 @@ class RestApi {
     String gramCarb = totalGram[1].toString();
     String gramProt = totalGram[2].toString();
 
-    print(totalGram);
+    String foodFats = "${gramFat}g ${tempDataFood['fats'][randFatsIndex]}";
+    String foodProt = "${gramCarb}g ${tempDataFood['protein'][randProtIndex]}";
+    String foodCarbs = "${gramProt}g ${tempDataFood['carbs'][randCarbsIndex]}";
 
-    String foodFats = gramFat + "g ${tempDataFood['fats'][randFatsIndex]}";
-    String foodProtein =
-        gramCarb + "g ${tempDataFood['protein'][randProteinIndex]}";
-    String foodCarbs = gramProt + "g ${tempDataFood['carbs'][randCarbsIndex]}";
+    String food = "$foodFats and $foodProt and $foodCarbs";
 
-    String apiUrlForFats =
-        "https://api.api-ninjas.com/v1/nutrition?query=$foodFats&X-Api-Key=$apiKeyNinjas";
-    String apiUrlForProtein =
-        "https://api.api-ninjas.com/v1/nutrition?query=$foodProtein&X-Api-Key=$apiKeyNinjas";
-    String apiUrlForCarbs =
-        "https://api.api-ninjas.com/v1/nutrition?query=$foodCarbs&X-Api-Key=$apiKeyNinjas";
+    String apiGetFood =
+        "https://api.api-ninjas.com/v1/nutrition?query=$food&X-Api-Key=$apiKeyNinjas";
 
     try {
-      final responseCarbs = await http.get(Uri.parse(apiUrlForCarbs));
-      final responseFats = await http.get(Uri.parse(apiUrlForFats));
-      final responseProtein = await http.get(Uri.parse(apiUrlForProtein));
+      final response = await http.get(Uri.parse(apiGetFood));
 
-      if (responseCarbs.statusCode == 200 &&
-          responseFats.statusCode == 200 &&
-          responseProtein.statusCode == 200) {
-        final decodedDataCarbs = json.decode(responseCarbs.body);
-        final decodedDataFats = json.decode(responseFats.body);
-        final decodedDataProtein = json.decode(responseProtein.body);
+      if (response.statusCode == 200) {
+        final decodedData = json.decode(response.body);
 
         Map<String, dynamic> foodData = {
           "carbs": {
-            "name": decodedDataCarbs[0]['name'],
-            "calories": decodedDataCarbs[0]['calories'],
-            "serving_size_g": decodedDataCarbs[0]['serving_size_g'],
+            "name": decodedData[2]['name'],
+            "calories": decodedData[2]['calories'],
+            "serving_size_g": decodedData[2]['serving_size_g'],
           },
           "protein": {
-            "name": decodedDataFats[0]['name'],
-            "calories": decodedDataFats[0]['calories'],
-            "serving_size_g": decodedDataFats[0]['serving_size_g'],
+            "name": decodedData[1]['name'],
+            "calories": decodedData[1]['calories'],
+            "serving_size_g": decodedData[1]['serving_size_g'],
           },
           "fats": {
-            "name": decodedDataProtein[0]['name'],
-            "calories": decodedDataProtein[0]['calories'],
-            "serving_size_g": decodedDataProtein[0]['serving_size_g'],
+            "name": decodedData[0]['name'],
+            "calories": decodedData[0]['calories'],
+            "serving_size_g": decodedData[0]['serving_size_g'],
           },
         };
 
         return foodData;
       } else {
-        print('Failed to load data. Status code: ${responseCarbs.statusCode}');
+        print('Failed to load data. Status code: ${response.statusCode}');
       }
     } catch (e) {
       print('Error: $e');

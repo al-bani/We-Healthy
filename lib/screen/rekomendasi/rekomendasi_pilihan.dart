@@ -101,7 +101,7 @@ class _RekomendasiPilihanState extends State<RekomendasiPilihan> {
               ),
             ),
           )),
-      bottomNavigationBar: bottomNavigationBar(),
+      bottomNavigationBar: bottomNavigationBar(userId: args['userId']),
     );
   }
 }

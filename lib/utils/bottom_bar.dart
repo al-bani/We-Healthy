@@ -1,48 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:we_healthy/screen/home_screen.dart';
 import 'package:we_healthy/screen/profile_page.dart';
+import 'package:we_healthy/screen/statistik_page.dart';
 
 class bottomNavigationBar extends StatefulWidget {
-  const bottomNavigationBar({super.key});
+  final String userId;
+  const bottomNavigationBar({Key? key, required this.userId}) : super(key: key);
 
   @override
   State<bottomNavigationBar> createState() => _bottomNavigationBarState();
 }
 
+int _currentIndex = 0;
+
 class _bottomNavigationBarState extends State<bottomNavigationBar> {
-  int _currentIndex = 0;
+  void onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+      switch (index) {
+        case 0:
+          // Navigator.pushReplacementNamed(context, 'home_screen');
+          Navigator.pushNamed(context, 'home_screen', arguments: {
+            'userId': widget.userId,
+          });
+          break;
+        case 1:
+          // Navigator.pushReplacementNamed(context, 'detail_bmi');
+          Navigator.pushNamed(context, 'statistik', arguments: {
+            'userId': widget.userId,
+          });
+          break;
+        case 2:
+          // Navigator.pushReplacementNamed(context, 'profile_page');
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const ProfilePage()),
+            (Route<dynamic> route) => false,
+          );
+          break;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: _currentIndex,
-      onTap: (index) {
-       
-
-        void onTabTapped(int index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        }
-         switch (index) {
-          case 0:
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => HomePage()),
-            );
-            break;
-          case 1:
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => ProfilePage()),
-            );
-            break;
-        }
-      },
-      items: [
+      items: const [
         BottomNavigationBarItem(
           icon: Icon(
             Icons.home_filled,
+            size: 40,
+          ),
+          label: '',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.bar_chart,
             size: 40,
           ),
           label: '',
@@ -55,24 +69,8 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
           label: '',
         ),
       ],
+      onTap: onTabTapped,
+      selectedItemColor: Colors.blue,
     );
-  }
-}
-
-class ScreenOne extends StatelessWidget {
-  const ScreenOne({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const HomePage();
-  }
-}
-
-class ScreenTwo extends StatelessWidget {
-  const ScreenTwo({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const ProfilePage();
   }
 }

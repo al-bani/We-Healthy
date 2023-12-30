@@ -55,7 +55,7 @@ class WehealthyLogic {
 
     Map<String, dynamic> tripleFoodList = {
       "carbs": foodCarbs,
-      "protein": foodFats,
+      "protein": foodProtein,
       "fats": foodFats,
     };
 
@@ -89,8 +89,6 @@ class WehealthyLogic {
           foodList['fats']['serving_size_g'].toString(),
           foodList['fats']['calories'].toString(),
           day));
-
-      print(responseFats);
 
       List<NutriensModel> carbsData =
           responseCarbs.map((e) => NutriensModel.fromJson(e)).toList();
@@ -129,5 +127,4 @@ class WehealthyLogic {
 
     return caloriesNeeded;
   }
-
 }

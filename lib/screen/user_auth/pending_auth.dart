@@ -30,7 +30,7 @@ class _PendingAuthPageState extends State<PendingAuthPage> {
   Future<void> sendVerificationEmail() async {
     _isSendVerification = true;
     _visibilityText = true;
-
+    startTimer();
     try {
       await _currentUser.sendEmailVerification();
     } catch (e) {
@@ -99,6 +99,7 @@ class _PendingAuthPageState extends State<PendingAuthPage> {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 0, 111, 247),
       body: Center(
+          child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             SizedBox(height: 100),
@@ -126,16 +127,16 @@ class _PendingAuthPageState extends State<PendingAuthPage> {
             ),
             SizedBox(height: 13),
             Text(
-              "kami telah mengirim kode verifikasi ke alamat",
+              "Klik tombol dibawah untuk mengirim link verifikasi ke alamat",
               style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 17,
                   fontWeight: FontWeight.w300,
                   color: Colors.white),
             ),
             Text(
               "email ${_currentUser.email}",
               style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 17,
                   fontWeight: FontWeight.w300,
                   color: Colors.white),
             ),
@@ -157,13 +158,13 @@ class _PendingAuthPageState extends State<PendingAuthPage> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: const Text('Kirim Ulang Link Verifikasi'),
+                    child: const Text('Kirim Link Verifikasi'),
                   ),
             SizedBox(height: 10),
             Visibility(
               visible: _visibilityText,
               child: Text(
-                  "Kirim Ulang link verifikasi dalam $_startTimeVerification  detik",
+                  "Kirim Ulang link verifikasi dalam $_startTimeVerification detik",
                   style: TextStyle(
                     fontSize: 17,
                     color: Colors.white,
@@ -189,7 +190,7 @@ class _PendingAuthPageState extends State<PendingAuthPage> {
             ),
           ],
         ),
-      ),
+      )),
     );
   }
 }

@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:we_healthy/models/makanan_day_model.dart';
 import 'package:we_healthy/models/nutriens_model.dart';
+import 'package:we_healthy/models/user_week_model.dart';
+import 'package:we_healthy/models/workout_day_model.dart';
 import 'package:we_healthy/services/etter_services.dart';
 import 'package:we_healthy/utils/bottom_bar.dart';
 import 'package:we_healthy/utils/config.dart';
@@ -18,9 +21,13 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
   late String periodisasi;
   late String hari;
   bool loading = true;
+  bool loadingButton = false;
+  bool visibilityDone = false;
   List<NutriensModel> carbsList = [];
   List<NutriensModel> proteinList = [];
   List<NutriensModel> fatsList = [];
+  late double caloriesTotal;
+  final TextEditingController _textFieldController = TextEditingController();
 
   DataService ds = DataService();
   List<String> gambar = [
@@ -28,6 +35,39 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
     '/rekomendasi/makanan/Ayam.png',
     '/rekomendasi/makanan/pisang.png',
   ];
+
+  Future<int> insertUserWeek() async {
+    List<UserWeekModel> checkingUserWeek = [];
+    List tempUserWeek = [];
+    String bb = _textFieldController.text;
+
+    tempUserWeek = jsonDecode(await ds.selectWhere(
+        token, project, 'user_week', appid, 'user_id', uid));
+
+    checkingUserWeek =
+        tempUserWeek.map((e) => UserWeekModel.fromJson(e)).toList();
+    List<int>? userWeek = [];
+    userWeek = checkingUserWeek
+        .map((e) => e.week)
+        .map(int.tryParse)
+        .cast<int>()
+        .toList();
+    int maxWeek =
+        userWeek.reduce((value, element) => value > element ? value : element);
+    int week = maxWeek + 1;
+
+    List response =
+        jsonDecode(await ds.insertUserWeek(appid, uid, bb, week.toString()));
+    List<UserWeekModel> userWeekInsert =
+        response.map((e) => UserWeekModel.fromJson(e)).toList();
+    if (userWeekInsert.length == 1) {
+      await ds.removeAll(token, project, 'makanan_day', appid);
+      print(100);
+
+      return 1;
+    }
+    return 0;
+  }
 
   void selectFoodData() async {
     await Future.delayed(Duration(seconds: 3));
@@ -60,8 +100,47 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
     fatsList = fatsListTemp.where((e) => e.hari == hari).toList();
 
     setState(() {
+      caloriesTotal = double.parse(carbsList[0].kalori) +
+          double.parse(proteinListTemp[0].kalori) +
+          double.parse(fatsListTemp[0].kalori);
       loading = false;
     });
+  }
+
+  Future<int> insertMakananData() async {
+    try {
+      List response = jsonDecode(await ds.insertMakananDay(
+          appid, uid, '1', hari, caloriesTotal.toString()));
+      List<MakananDayModel> makananData =
+          response.map((e) => MakananDayModel.fromJson(e)).toList();
+      if (makananData.length == 1) {
+        return 1;
+      } else {
+        return 0;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return 0;
+  }
+
+  void selectMakananDone() async {
+    await Future.delayed(Duration(seconds: 3));
+    List tempMakananDone = [];
+    List<MakananDayModel> makananDone = [];
+
+    tempMakananDone = jsonDecode(await ds.selectWhere(
+        token, project, 'makanan_day', appid, 'hari', hari));
+    makananDone =
+        tempMakananDone.map((e) => MakananDayModel.fromJson(e)).toList();
+
+    if (makananDone.isNotEmpty) {
+      if (makananDone.every((element) => element.user_id == uid)) {
+        setState(() {
+          visibilityDone = true;
+        });
+      }
+    }
   }
 
   @override
@@ -69,6 +148,7 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
     // TODO: implement initState
     super.initState();
     selectFoodData();
+    selectMakananDone();
   }
 
   @override
@@ -123,7 +203,7 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
                           ),
                         ),
                         Text(
-                          "Total Kalori Anda 1288 kcal",
+                          "Total Kalori makanan $caloriesTotal kcal",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,
@@ -147,7 +227,7 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
                     const SizedBox(height: 40),
                     Card(
                       child: ExpansionTile(
-                        title: Text('Karbohidrat: 30%'),
+                        title: Text('Karbohidrat: 35%'),
                         children: <Widget>[
                           Padding(
                             padding: EdgeInsets.fromLTRB(2, 5, 0, 5),
@@ -185,7 +265,7 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
                     const SizedBox(height: 5),
                     Card(
                       child: ExpansionTile(
-                        title: Text('Lemak: 30%'),
+                        title: Text('Lemak: 35%'),
                         children: <Widget>[
                           Padding(
                             padding: EdgeInsets.fromLTRB(2, 5, 0, 5),
@@ -201,11 +281,154 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
                         ],
                       ),
                     ),
+                    const SizedBox(height: 30),
+                    visibilityDone
+                        ? Text(
+                            "Anda telah menyelesaikan rekomendasi makanan hari ini",
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          )
+                        : loadingButton
+                            ? CircularProgressIndicator()
+                            : ElevatedButton.icon(
+                                onPressed: () async {
+                                  setState(() {
+                                    loadingButton = true;
+                                  });
+
+                                  if (hari == '7') {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: const Text("Pemberitahuan"),
+                                            content: const Text(
+                                                "Update berat badan anda"),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    Navigator.pop(context);
+                                                  });
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return AlertDialog(
+                                                          title: const Text(
+                                                              'Berat badan Anda'),
+                                                          content: TextField(
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .number,
+                                                            controller:
+                                                                _textFieldController,
+                                                            decoration:
+                                                                const InputDecoration(
+                                                                    suffix: Text(
+                                                                        'kg'),
+                                                                    hintText:
+                                                                        "0"),
+                                                          ),
+                                                          actions: <Widget>[
+                                                            MaterialButton(
+                                                              color: Colors.red,
+                                                              textColor:
+                                                                  Colors.white,
+                                                              child: const Text(
+                                                                  'CANCEL'),
+                                                              onPressed: () {
+                                                                setState(() {
+                                                                  loadingButton =
+                                                                      false;
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                });
+                                                              },
+                                                            ),
+                                                            MaterialButton(
+                                                              color:
+                                                                  Colors.green,
+                                                              textColor:
+                                                                  Colors.white,
+                                                              child: const Text(
+                                                                  'Lanjutkan'),
+                                                              onPressed:
+                                                                  () async {
+                                                                int statusInsertUserWeek =
+                                                                    await insertUserWeek();
+
+                                                                if (statusInsertUserWeek ==
+                                                                    1) {
+                                                                  Navigator.pushNamed(
+                                                                      context,
+                                                                      'rekomendasi_hari_makan',
+                                                                      arguments: {
+                                                                        'periodisasi':
+                                                                            args['periodisasi'],
+                                                                        'userId':
+                                                                            args['userId'],
+                                                                        'pilihan':
+                                                                            'makanan'
+                                                                      });
+                                                                } else {
+                                                                  setState(() {
+                                                                    loadingButton =
+                                                                        false;
+                                                                  });
+                                                                }
+                                                              },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      });
+                                                },
+                                                child: const Text("OK"),
+                                              ),
+                                            ],
+                                          );
+                                        });
+                                  } else {
+                                    int statusMakananInsert =
+                                        await insertMakananData();
+
+                                    if (statusMakananInsert == 1) {
+                                      Navigator.pushNamed(
+                                          context, 'rekomendasi_hari_makan',
+                                          arguments: {
+                                            'periodisasi': args['periodisasi'],
+                                            'userId': args['userId'],
+                                            'pilihan': 'makanan'
+                                          });
+                                    } else {
+                                      setState(() {
+                                        loadingButton = false;
+                                      });
+                                    }
+                                  }
+                                },
+                                icon: Icon(
+                                  Icons.check,
+                                  color: Colors.white, // Warna ikon
+                                ),
+                                label: Text(
+                                  'Selesai',
+                                  style: TextStyle(
+                                    color: Colors.white, // Warna teks
+                                  ),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors
+                                      .blue, // Warna latar belakang tombol
+                                ),
+                              ),
                   ],
                 ),
               ),
       ),
-      bottomNavigationBar: bottomNavigationBar(),
+      bottomNavigationBar: bottomNavigationBar(userId: uid),
     );
   }
 }

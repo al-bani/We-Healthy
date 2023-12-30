@@ -5,6 +5,7 @@ import 'package:we_healthy/screen/profile_page.dart';
 import 'package:we_healthy/screen/rekomendasi/rekomendasi_hari_makanan.dart';
 import 'package:we_healthy/screen/rekomendasi/rekomendasi_hari_olahraga.dart';
 import 'package:we_healthy/screen/splash_screen.dart';
+import 'package:we_healthy/screen/statistik_page.dart';
 import 'package:we_healthy/screen/user_auth/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:we_healthy/screen/user_auth/register_page.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: 'splash_screen',
       routes: {
+        'statistik': (context) => StatistikPage(),
         'welcome_screen': (context) => WelcomeScreen(),
         'register_page': (context) => RegisterPage(),
         'login_page': (context) => LoginPage(),

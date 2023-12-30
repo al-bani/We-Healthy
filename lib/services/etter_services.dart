@@ -10,10 +10,10 @@ class DataService {
       String umur,
       String berat_badan,
       String tinggi_badan,
-      String bmi,
-      String kalori_perhari,
       String kegiatan,
-      String kategori_berat) async {
+      String kalori_perhari,
+      String kategori_berat,
+      String bmi) async {
     String uri = 'https://io.etter.cloud/v4/insert';
 
     try {
@@ -27,10 +27,10 @@ class DataService {
         'umur': umur,
         'berat_badan': berat_badan,
         'tinggi_badan': tinggi_badan,
-        'bmi': bmi,
-        'kalori_perhari': kalori_perhari,
         'kegiatan': kegiatan,
-        'kategori_berat': kategori_berat
+        'kalori_perhari': kalori_perhari,
+        'kategori_berat': kategori_berat,
+        'bmi': bmi
       });
 
       if (response.statusCode == 200) {
@@ -173,6 +173,89 @@ class DataService {
         'nama_workout': nama_workout,
         'repetisi': repetisi,
         'kalori': kalori
+      });
+
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        // Return an empty array
+        return '[]';
+      }
+    } catch (e) {
+      // Print error here
+      return '[]';
+    }
+  }
+
+  Future insertUserWeek(
+      String appid, String user_id, String berat_badan, String week) async {
+    String uri = 'https://io.etter.cloud/v4/insert';
+
+    try {
+      final response = await http.post(Uri.parse(uri), body: {
+        'token': '65740448c735f28b8b45eda9',
+        'project': 'db_we_healthy',
+        'collection': 'user_week',
+        'appid': appid,
+        'user_id': user_id,
+        'berat_badan': berat_badan,
+        'week': week
+      });
+
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        // Return an empty array
+        return '[]';
+      }
+    } catch (e) {
+      // Print error here
+      return '[]';
+    }
+  }
+
+  Future insertMakananDay(String appid, String user_id, String point,
+      String hari, String total_kalori) async {
+    String uri = 'https://io.etter.cloud/v4/insert';
+
+    try {
+      final response = await http.post(Uri.parse(uri), body: {
+        'token': '65740448c735f28b8b45eda9',
+        'project': 'db_we_healthy',
+        'collection': 'makanan_day',
+        'appid': appid,
+        'user_id': user_id,
+        'point': point,
+        'hari': hari,
+        'total_kalori': total_kalori
+      });
+
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        // Return an empty array
+        return '[]';
+      }
+    } catch (e) {
+      // Print error here
+      return '[]';
+    }
+  }
+
+  Future insertWorkoutDay(String appid, String user_id, String hari,
+      String point, String kalori_terbakar) async {
+    String uri = 'https://io.etter.cloud/v4/insert';
+
+    try {
+      final response = await http.post(Uri.parse(uri), body: {
+        'token': '65740448c735f28b8b45eda9',
+        'project': 'db_we_healthy',
+        'collection': 'workout_day',
+        'appid': appid,
+        'user_id': user_id,
+        'hari': hari,
+        'point': point,
+        'kalori_terbakar': kalori_terbakar
       });
 
       if (response.statusCode == 200) {
@@ -406,13 +489,9 @@ class DataService {
       final response = await http.delete(Uri.parse(uri));
 
       if (response.statusCode == 200) {
-        return true;
-      } else {
-        return false;
-      }
+      } else {}
     } catch (e) {
-      // Print error here
-      return false;
+      print(e);
     }
   }
 

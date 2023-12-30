@@ -213,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                                                 user);
                                         if (_isVerified) {
                                           List userDataCheck = [];
-                                          
+
                                           userDataCheck = jsonDecode(
                                               await ds.selectWhere(
                                                   token,
@@ -236,7 +236,9 @@ class _LoginPageState extends State<LoginPage> {
                                           } else {
                                             Navigator.pushNamed(
                                                 context, 'home_screen',
-                                                arguments: user.uid);
+                                                arguments: {
+                                                  'userId': user.uid
+                                                });
                                           }
                                         } else {
                                           Navigator.of(context).pushReplacement(

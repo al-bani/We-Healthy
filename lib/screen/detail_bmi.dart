@@ -21,10 +21,10 @@ class _BmiDetailState extends State<BmiDetail> {
   late List<double> calories = [];
   final FirebaseAuth auth = FirebaseAuth.instance;
   DataService ds = DataService();
+  String uid = '';
 
   void selectFetchData() async {
-    final User? user = auth.currentUser;
-    String uid = user!.uid;
+    await Future.delayed(Duration(seconds: 3));
     List tempData = [];
     List<UserDataModel> _dataUser = [];
 
@@ -57,29 +57,34 @@ class _BmiDetailState extends State<BmiDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return loading
-        ? const CircularProgressIndicator()
-        : Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.arrow_back,
-                    size: 30,
-                  )),
-              title: Image.asset(
-                'wehealty.png',
-                fit: BoxFit.contain,
-                height: 170,
-              ),
-            ),
-            body: Padding(
-              padding: EdgeInsets.all(24),
-              child: SingleChildScrollView(
-                child: Center(
-                  child: Column(
+    Map<String, dynamic> args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    setState(() {
+      uid = args['userId'];
+    });
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              size: 30,
+            )),
+        title: Image.asset(
+          'wehealty.png',
+          fit: BoxFit.contain,
+          height: 170,
+        ),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(24),
+        child: SingleChildScrollView(
+          child: Center(
+            child: loading
+                ? const CircularProgressIndicator()
+                : Column(
                     children: [
                       Card(
                         child: Padding(
@@ -394,10 +399,10 @@ class _BmiDetailState extends State<BmiDetail> {
                       ),
                     ],
                   ),
-                ),
-              ),
-            ),
-            bottomNavigationBar: bottomNavigationBar(),
-          );
+          ),
+        ),
+      ),
+      bottomNavigationBar: bottomNavigationBar(userId: uid),
+    );
   }
 }

@@ -42,7 +42,9 @@ class _RekomendasiState extends State<Rekomendasi> {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, 'home_screen');
+              Navigator.pushNamed(context, 'home_screen', arguments: {
+                'userId': userId,
+              });
             },
             icon: Icon(
               Icons.arrow_back,
@@ -128,7 +130,7 @@ class _RekomendasiState extends State<Rekomendasi> {
           },
         ),
       ),
-      bottomNavigationBar: bottomNavigationBar(),
+      bottomNavigationBar: bottomNavigationBar(userId: userId),
     );
   }
 }
