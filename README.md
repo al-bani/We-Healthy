@@ -1,16 +1,15 @@
-# we_healthy
 
-A new Flutter project.
+# we healthy project
+Aplikasi dirancang memberikan rekomendasi makanan dan olahraga sesuai dengan kebutuhan pengguna. Aplikasi ini menggunakan data pengguna, seperti usia, jenis kelamin, berat badan, tinggi badan, dan aktivitas fisik, untuk menghitung kebutuhan nutrisi dan aktivitas fisik pengguna. Kemudian, aplikasi ini akan memberikan rekomendasi makanan dan olahraga yang sesuai dengan kebutuhan tersebut.
+## Tools yang digunakan
 
-## Getting Started
+Menggunakan Flutter framework, Firebase auth, dan database menggunakan no sql
+## High fidelity Design
 
-This project is a starting point for a Flutter application.
+[Link in Figma](https://www.figma.com/file/8WQrIt2fvsPye4GJ1ZfGfT/Low-Fidelity-we-healthy?type=design&node-id=0%3A1&mode=design&t=LuZakRI6s87oVLwj-1)
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Feedback
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+jika masih ada kendala silahkan hubungi al.zildan@mhs.itenas.ac.id atau [Telegram](t.me/SingaporeTrades)
+
