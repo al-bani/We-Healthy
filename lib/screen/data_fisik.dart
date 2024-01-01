@@ -40,42 +40,17 @@ class _DataFisikState extends State<DataFisik> {
     tb = double.parse(tb);
 
     double bmi = calc.bmi(bb, tb).roundToDouble();
-    double bmr = calc.bmr(gender, umur, tb, bb);
+    double bmr = calc.bmr(gender, umur, tb, bb).roundToDouble();
     double tdee = calc.tdee(bmr, metValue).roundToDouble();
-    late String? kategoriBerat;
     String userId = loggedUser.uid;
 
-    if (bmi <= 18.5) {
-      kategoriBerat = "underweight";
-    } else if (bmi >= 18.5 && bmi <= 24.9) {
-      kategoriBerat = "normal";
-    } else if (bmi >= 25 && bmi <= 29.9) {
-      kategoriBerat = "overweight";
-    } else if (bmi >= 30 && bmi <= 34.9) {
-      kategoriBerat = "obesitas 1";
-    } else if (bmi >= 35 && bmi <= 39.9) {
-      kategoriBerat = "obesitas 2";
-    } else if (bmi >= 40) {
-      kategoriBerat = "obesitas 3";
-    }
-
     try {
-      List response = jsonDecode(await ds.insertUserData(
-          appid,
-          userId,
-          gender,
-          umur.toString(),
-          bb.toString(),
-          tb.toString(),
-          metValue.toString(),
-          tdee.toString(),
-          kategoriBerat!,
-          bmi.toString()));
       List responseWeek = jsonDecode(
           await ds.insertUserWeek(appid, userId, bb.toString(), '1'));
 
-      List<UserDataModel> userData =
-          response.map((e) => UserDataModel.fromJson(e)).toList();
+      List<UserDataModel> userData = await calc.insertUserData(
+          bmi, bmr, tdee, bb, tb, userId, gender, umur, metValue);
+
       if (userData.length == 1) {
         Navigator.pushNamed(context, 'home_screen',
             arguments: {'userId': userId});
@@ -83,7 +58,6 @@ class _DataFisikState extends State<DataFisik> {
         setState(() {
           loading = false;
         });
-        print(response);
       }
     } catch (e) {
       print(e);
@@ -225,6 +199,7 @@ class _DataFisikState extends State<DataFisik> {
                               filled: true,
                               fillColor: Colors.grey[200],
                               prefixIcon: const Icon(Icons.line_weight),
+                              suffix: const Text('kg'),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
@@ -243,6 +218,7 @@ class _DataFisikState extends State<DataFisik> {
                                   vertical: 10, horizontal: 10),
                               labelText: 'Tinggi Badan', // Icon be
                               hintText: 'centimeter',
+                              suffix: const Text('cm'),
                               filled: true,
                               prefixIcon: const Icon(Icons.height),
                               fillColor: Colors.grey[200],

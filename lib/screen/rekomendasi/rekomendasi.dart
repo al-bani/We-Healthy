@@ -13,9 +13,9 @@ class _RekomendasiState extends State<Rekomendasi> {
   String userId = ' ';
 
   List<String> deskripsi = [
-    'Meningkatkan kalori untuk membangun otot. blablablalba',
-    'Menjaga keseimbangan kalori untuk mempertahankan berat badan.',
-    'Mengurangi kalori untuk menurunkan lemak tubuh.'
+    'Meningkatkan berat badan dan massa otot dengan asupan kalori berlebihan dan latihan berat.',
+    'Memelihara berat badan dan otot yang sudah ada dengan asupan kalori seimbang.',
+    'Kurangi lemak dengan makan lebih sedikit dan latihan kardio untuk tonjolkan otot.'
   ];
 
   List<String> gambar = [
@@ -51,7 +51,7 @@ class _RekomendasiState extends State<Rekomendasi> {
               size: 30,
             )),
         title: Image.asset(
-          'wehealty.png',
+          'assets/wehealty.png',
           fit: BoxFit.contain,
           height: 170,
         ),
@@ -69,7 +69,7 @@ class _RekomendasiState extends State<Rekomendasi> {
                 child: Stack(
                   children: <Widget>[
                     Image.asset(
-                      'gym.png',
+                      'assets/gym.png',
                       width: double.infinity,
                       height: 200,
                       fit: BoxFit.fill,
@@ -116,7 +116,7 @@ class _RekomendasiState extends State<Rekomendasi> {
                       arguments: {'periodisasi': item, 'userId': userId});
                 },
                 leading: Image.asset(
-                  '$img',
+                  'assets/$img',
                   scale: 10,
                   fit: BoxFit.fitWidth,
                 ),

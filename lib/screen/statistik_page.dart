@@ -82,7 +82,7 @@ class _StatistikPageState extends State<StatistikPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Image.asset(
-          'wehealty.png',
+          'assets/wehealty.png',
           fit: BoxFit.contain,
           height: 170,
         ),
@@ -100,7 +100,7 @@ class _StatistikPageState extends State<StatistikPage> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12.0),
                         child: Image.asset(
-                          'progress.png',
+                          'assets/progress.png',
                           width: double.infinity,
                           fit: BoxFit.fill,
                           height: 200,
@@ -193,7 +193,7 @@ class DayColumn extends StatelessWidget {
         SizedBox(height: 10),
         CircleAvatar(
           radius: 13, // Image radius
-          backgroundImage: AssetImage('/icon/$iconProg.png'),
+          backgroundImage: AssetImage('assets/icon/$iconProg.png'),
         ),
       ],
     );
@@ -227,13 +227,13 @@ class _ChartCardState extends State<ChartCard> {
     }).toList();
 
     if (getWeight.length != 1) {
-      for (double angka in berat) {
-        averageWeight += angka;
+      for (double beratPerWeek in berat) {
+        averageWeight += beratPerWeek;
       }
 
       int maxProgressWeight = berat.length - 1;
 
-      averageWeight = (averageWeight / maxProgressWeight + 1).roundToDouble();
+      averageWeight = (averageWeight / (maxProgressWeight + 1)).roundToDouble();
       beforeWeight = (berat[maxProgressWeight - 1]).roundToDouble();
       currentWeight = (berat[maxProgressWeight]).roundToDouble();
 
@@ -433,7 +433,7 @@ class IconProgress extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 12, // Image radius
-          backgroundImage: AssetImage('icon/$iconName.png'),
+          backgroundImage: AssetImage('assets/icon/$iconName.png'),
         ),
         SizedBox(width: 5),
         Text(

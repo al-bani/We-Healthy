@@ -102,7 +102,7 @@ class _RekomendasiHariMakananState extends State<RekomendasiHariMakanan> {
               size: 30,
             )),
         title: Image.asset(
-          'wehealty.png',
+          'assets/wehealty.png',
           fit: BoxFit.contain,
           height: 170,
         ),
@@ -122,7 +122,7 @@ class _RekomendasiHariMakananState extends State<RekomendasiHariMakanan> {
                       child: Stack(
                         children: <Widget>[
                           Image.asset(
-                            'fotohari.png',
+                            'assets/fotohari.png',
                             width: double.infinity,
                             fit: BoxFit.fill,
                           ),

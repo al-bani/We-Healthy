@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:we_healthy/models/food_model.dart';
 import 'package:we_healthy/models/nutriens_model.dart';
+import 'package:we_healthy/models/user_model.dart';
 import 'package:we_healthy/services/etter_services.dart';
 import 'package:we_healthy/services/rest_api.dart';
 import 'package:we_healthy/utils/config.dart';
@@ -107,6 +108,123 @@ class WehealthyLogic {
     }
 
     return status;
+  }
+
+  Future<List<UserDataModel>> insertUserData(
+      double bmi,
+      double bmr,
+      double tdee,
+      double bb,
+      double tb,
+      String userId,
+      String gender,
+      int umur,
+      double metValue) async {
+    List<UserDataModel> userData = [];
+    late String? kategoriBerat;
+
+    if (bmi <= 18.5) {
+      kategoriBerat = "underweight";
+    } else if (bmi >= 18.5 && bmi <= 24.9) {
+      kategoriBerat = "normal";
+    } else if (bmi >= 25 && bmi <= 29.9) {
+      kategoriBerat = "overweight";
+    } else if (bmi >= 30 && bmi <= 34.9) {
+      kategoriBerat = "obesitas 1";
+    } else if (bmi >= 35 && bmi <= 39.9) {
+      kategoriBerat = "obesitas 2";
+    } else if (bmi >= 40) {
+      kategoriBerat = "obesitas 3";
+    }
+
+    try {
+      List response = jsonDecode(await ds.insertUserData(
+          appid,
+          userId,
+          gender,
+          umur.toString(),
+          bb.toString(),
+          tb.toString(),
+          metValue.toString(),
+          tdee.toString(),
+          kategoriBerat!,
+          bmi.toString()));
+      userData = response.map((e) => UserDataModel.fromJson(e)).toList();
+    } catch (e) {
+      print(e);
+    }
+
+    return userData;
+  }
+
+  Future<bool> updateUserData(
+    String userId,
+    double bb,
+    double metValue,
+    int umur,
+    double tb,
+  ) async {
+    List<UserDataModel> getUserData = [];
+    List tempUserGetData = [];
+
+    tempUserGetData = jsonDecode(await ds.selectWhere(
+        token, project, 'user_data', appid, 'user_id', userId));
+    getUserData =
+        tempUserGetData.map((e) => UserDataModel.fromJson(e)).toList();
+
+    String gender = getUserData[0].gender;
+    late String kategoriBerat;
+
+    if (metValue == 0) {
+      metValue = double.parse(getUserData[0].kegiatan);
+    }
+
+    print('metValue : $metValue');
+
+    if (tb == 0) {
+      tb = double.parse(getUserData[0].tinggi_badan);
+    }
+
+    print('metValue : $tb');
+
+    if (umur == 0) {
+      umur = int.parse(getUserData[0].umur);
+    }
+
+    print('metValue : $umur');
+
+    double bmiValue = bmi(bb, tb).roundToDouble();
+    double bmrValue = bmr(gender, umur, tb, bb).roundToDouble();
+    double tdeeValue = tdee(bmrValue, metValue).roundToDouble();
+
+    if (bmiValue <= 18.5) {
+      kategoriBerat = "underweight";
+    } else if (bmiValue >= 18.5 && bmiValue <= 24.9) {
+      kategoriBerat = "normal";
+    } else if (bmiValue >= 25 && bmiValue <= 29.9) {
+      kategoriBerat = "overweight";
+    } else if (bmiValue >= 30 && bmiValue <= 34.9) {
+      kategoriBerat = "obesitas 1";
+    } else if (bmiValue >= 35 && bmiValue <= 39.9) {
+      kategoriBerat = "obesitas 2";
+    } else if (bmiValue >= 40) {
+      kategoriBerat = "obesitas 3";
+    }
+
+    bool updateUserData = await ds.updateWhere(
+        'user_id',
+        userId,
+        'berat_badan~bmi~kalori_perhari~kategori_berat',
+        '${bb.toString()}~${bmiValue.toString()}~${tdeeValue.toString()}~$kategoriBerat',
+        token,
+        project,
+        'user_data',
+        appid);
+    if (updateUserData) {
+      return true;
+    }
+
+    return false;
   }
 
   List<double> caloriesCalc(double calorie, String tipe) {

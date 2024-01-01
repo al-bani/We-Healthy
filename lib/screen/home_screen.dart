@@ -165,7 +165,7 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Center(
-          child: Image.asset('/logo/logo_blue.png'),
+          child: Image.asset('assets/logo/logo_blue.png'),
         ),
       ),
       body: Center(
@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                                       borderRadius: BorderRadius.circular(10.0),
                                       image: DecorationImage(
                                         image: AssetImage(
-                                            '/cuaca/$weather'), // Ganti dengan path gambar Anda
+                                            'assets/cuaca/$weather'), // Ganti dengan path gambar Anda
                                         fit: BoxFit
                                             .cover, // Sesuaikan dengan preferensi desain Anda
                                       ),
@@ -277,7 +277,7 @@ class _HomePageState extends State<HomePage> {
                                                 child: Padding(
                                               padding: EdgeInsets.all(0),
                                               child: Image.asset(
-                                                '/udara/$airPolution',
+                                                'assets/udara/$airPolution',
                                                 width: 100,
                                                 height: 150,
                                               ),

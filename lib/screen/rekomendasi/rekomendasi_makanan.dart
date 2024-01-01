@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:we_healthy/models/makanan_day_model.dart';
 import 'package:we_healthy/models/nutriens_model.dart';
+import 'package:we_healthy/models/user_model.dart';
 import 'package:we_healthy/models/user_week_model.dart';
 import 'package:we_healthy/models/workout_day_model.dart';
 import 'package:we_healthy/services/etter_services.dart';
+import 'package:we_healthy/services/wehealthy_services.dart';
 import 'package:we_healthy/utils/bottom_bar.dart';
 import 'package:we_healthy/utils/config.dart';
 
@@ -28,13 +30,98 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
   List<NutriensModel> fatsList = [];
   late double caloriesTotal;
   final TextEditingController _textFieldController = TextEditingController();
-
+  WehealthyLogic whl = WehealthyLogic();
   DataService ds = DataService();
-  List<String> gambar = [
-    '/rekomendasi/makanan/nasi.png',
-    '/rekomendasi/makanan/Ayam.png',
-    '/rekomendasi/makanan/pisang.png',
-  ];
+
+  Future<void> dialogNotif(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Pemberitahuan"),
+            content: const Text(
+                "Update Berat badan berhasil, anda akan diarahkan ke homepage, untuk melihat progress silahkan pergi ke page statistik"),
+            actions: <Widget>[
+              MaterialButton(
+                color: Colors.green,
+                textColor: Colors.white,
+                child: const Text('OK !'),
+                onPressed: () async {
+                  Navigator.pushNamed(context, 'home_screen',
+                      arguments: {'userId': uid});
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> dialogUpdate(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Berat badan Anda'),
+            content: TextField(
+              keyboardType: TextInputType.number,
+              controller: _textFieldController,
+              decoration:
+                  const InputDecoration(suffix: Text('kg'), hintText: "0"),
+            ),
+            actions: <Widget>[
+              MaterialButton(
+                color: Colors.red,
+                textColor: Colors.white,
+                child: const Text('CANCEL'),
+                onPressed: () {
+                  setState(() {
+                    loadingButton = false;
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              MaterialButton(
+                color: Colors.green,
+                textColor: Colors.white,
+                child: const Text('Lanjutkan'),
+                onPressed: () async {
+                  int statusInsertUserWeek = await insertUserWeek();
+
+                  if (statusInsertUserWeek == 1) {
+                    dialogNotif(context);
+                  } else {
+                    setState(() {
+                      loadingButton = false;
+                    });
+                  }
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> dialogConfirm(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Pemberitahuan"),
+            content: const Text("Update berat badan anda"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                  dialogUpdate(context);
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        });
+  }
 
   Future<int> insertUserWeek() async {
     List<UserWeekModel> checkingUserWeek = [];
@@ -62,9 +149,13 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
         response.map((e) => UserWeekModel.fromJson(e)).toList();
     if (userWeekInsert.length == 1) {
       await ds.removeAll(token, project, 'makanan_day', appid);
-      print(100);
 
-      return 1;
+      bool updateUserData =
+          await whl.updateUserData(uid, double.parse(bb), 0, 0, 0);
+      if (updateUserData) {
+        print('userData Update : $updateUserData');
+        return 1;
+      }
     }
     return 0;
   }
@@ -100,9 +191,10 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
     fatsList = fatsListTemp.where((e) => e.hari == hari).toList();
 
     setState(() {
-      caloriesTotal = double.parse(carbsList[0].kalori) +
-          double.parse(proteinListTemp[0].kalori) +
-          double.parse(fatsListTemp[0].kalori);
+      caloriesTotal = (double.parse(carbsList[0].kalori) +
+              double.parse(proteinListTemp[0].kalori) +
+              double.parse(fatsListTemp[0].kalori))
+          .floorToDouble();
       loading = false;
     });
   }
@@ -177,7 +269,7 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
               size: 30,
             )),
         title: Image.asset(
-          'wehealty.png',
+          'assets/wehealty.png',
           fit: BoxFit.contain,
           height: 170,
         ),
@@ -196,7 +288,7 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(12.0),
                           child: Image.asset(
-                            'makanan.png',
+                            'assets/makanan.png',
                             width: double.infinity,
                             fit: BoxFit.fill,
                             height: 200,
@@ -235,7 +327,8 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
                               title: Text(
                                   '${carbsList[0].nama_makanan}: ${carbsList[0].jumlah_sajian}g'),
                               leading: CircleAvatar(
-                                backgroundImage: AssetImage('icon.png'),
+                                backgroundImage: AssetImage(
+                                    'assets/icon/food/${carbsList[0].nama_makanan}.png'),
                               ),
                               subtitle: Text('${carbsList[0].kalori} kcal'),
                             ),
@@ -254,7 +347,8 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
                               title: Text(
                                   '${proteinList[0].nama_makanan}: ${proteinList[0].jumlah_sajian}g'),
                               leading: CircleAvatar(
-                                backgroundImage: AssetImage('icon.png'),
+                                backgroundImage: AssetImage(
+                                    'assets/icon/food/${proteinList[0].nama_makanan}.png'),
                               ),
                               subtitle: Text('${proteinList[0].kalori} kcal'),
                             ),
@@ -273,7 +367,8 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
                               title: Text(
                                   '${fatsList[0].nama_makanan}: ${fatsList[0].jumlah_sajian}g'),
                               leading: CircleAvatar(
-                                backgroundImage: AssetImage('icon.png'),
+                                backgroundImage: AssetImage(
+                                    'assets/icon/food/${fatsList[0].nama_makanan}.png'),
                               ),
                               subtitle: Text('${fatsList[0].kalori} kcal'),
                             ),
@@ -299,97 +394,7 @@ class _RekomendasiMakananState extends State<RekomendasiMakanan> {
                                   });
 
                                   if (hari == '7') {
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text("Pemberitahuan"),
-                                            content: const Text(
-                                                "Update berat badan anda"),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    Navigator.pop(context);
-                                                  });
-                                                  showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return AlertDialog(
-                                                          title: const Text(
-                                                              'Berat badan Anda'),
-                                                          content: TextField(
-                                                            keyboardType:
-                                                                TextInputType
-                                                                    .number,
-                                                            controller:
-                                                                _textFieldController,
-                                                            decoration:
-                                                                const InputDecoration(
-                                                                    suffix: Text(
-                                                                        'kg'),
-                                                                    hintText:
-                                                                        "0"),
-                                                          ),
-                                                          actions: <Widget>[
-                                                            MaterialButton(
-                                                              color: Colors.red,
-                                                              textColor:
-                                                                  Colors.white,
-                                                              child: const Text(
-                                                                  'CANCEL'),
-                                                              onPressed: () {
-                                                                setState(() {
-                                                                  loadingButton =
-                                                                      false;
-                                                                  Navigator.pop(
-                                                                      context);
-                                                                });
-                                                              },
-                                                            ),
-                                                            MaterialButton(
-                                                              color:
-                                                                  Colors.green,
-                                                              textColor:
-                                                                  Colors.white,
-                                                              child: const Text(
-                                                                  'Lanjutkan'),
-                                                              onPressed:
-                                                                  () async {
-                                                                int statusInsertUserWeek =
-                                                                    await insertUserWeek();
-
-                                                                if (statusInsertUserWeek ==
-                                                                    1) {
-                                                                  Navigator.pushNamed(
-                                                                      context,
-                                                                      'rekomendasi_hari_makan',
-                                                                      arguments: {
-                                                                        'periodisasi':
-                                                                            args['periodisasi'],
-                                                                        'userId':
-                                                                            args['userId'],
-                                                                        'pilihan':
-                                                                            'makanan'
-                                                                      });
-                                                                } else {
-                                                                  setState(() {
-                                                                    loadingButton =
-                                                                        false;
-                                                                  });
-                                                                }
-                                                              },
-                                                            ),
-                                                          ],
-                                                        );
-                                                      });
-                                                },
-                                                child: const Text("OK"),
-                                              ),
-                                            ],
-                                          );
-                                        });
+                                    dialogConfirm(context);
                                   } else {
                                     int statusMakananInsert =
                                         await insertMakananData();

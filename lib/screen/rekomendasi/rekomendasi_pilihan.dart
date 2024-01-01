@@ -26,7 +26,7 @@ class _RekomendasiPilihanState extends State<RekomendasiPilihan> {
               size: 30,
             )),
         title: Image.asset(
-          'wehealty.png',
+          'assets/wehealty.png',
           fit: BoxFit.contain,
           height: 170,
         ),
@@ -53,7 +53,7 @@ class _RekomendasiPilihanState extends State<RekomendasiPilihan> {
                         alignment: Alignment.centerLeft,
                         children: <Widget>[
                           Image.asset(
-                            'olahraga.png',
+                            'assets/olahraga.png',
                             width: double.infinity,
                             fit: BoxFit.fill,
                           ),
@@ -82,7 +82,7 @@ class _RekomendasiPilihanState extends State<RekomendasiPilihan> {
                         alignment: Alignment.centerLeft,
                         children: <Widget>[
                           Image.asset(
-                            'makanan.png',
+                            'assets/makanan.png',
                             width: double.infinity,
                             fit: BoxFit.fill,
                           ),

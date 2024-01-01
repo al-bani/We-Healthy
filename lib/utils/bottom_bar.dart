@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:we_healthy/screen/home_screen.dart';
-import 'package:we_healthy/screen/profile_page.dart';
-import 'package:we_healthy/screen/statistik_page.dart';
 
 class bottomNavigationBar extends StatefulWidget {
   final String userId;
@@ -32,11 +29,9 @@ class _bottomNavigationBarState extends State<bottomNavigationBar> {
           break;
         case 2:
           // Navigator.pushReplacementNamed(context, 'profile_page');
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const ProfilePage()),
-            (Route<dynamic> route) => false,
-          );
+          Navigator.pushNamed(context, 'profile_page', arguments: {
+            'userId': widget.userId,
+          });
           break;
       }
     });

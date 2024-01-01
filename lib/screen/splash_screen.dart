@@ -15,7 +15,7 @@ class SplashScreen extends StatelessWidget {
         splash: Column(
           children: <Widget>[
             Image.asset(
-              '/logo/logo.png',
+              "assets/logo/logo.png",
             )
           ],
         ),

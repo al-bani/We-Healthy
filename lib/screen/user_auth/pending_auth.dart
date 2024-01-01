@@ -104,14 +104,14 @@ class _PendingAuthPageState extends State<PendingAuthPage> {
           children: <Widget>[
             SizedBox(height: 100),
             Image.asset(
-              'logo/logo_white.png',
+              'assets/logo/logo_white.png',
               width: 190,
               height: 70,
               fit: BoxFit.fill,
             ),
             SizedBox(height: 120),
             Image.asset(
-              'logo/verification_page.png',
+              'assets/logo/verification_page.png',
               width: 390,
               height: 220,
               fit: BoxFit.fill,

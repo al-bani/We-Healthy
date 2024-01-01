@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:flutter_application_1/utils/rounded_button.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -20,7 +18,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               children: <Widget>[
                 const SizedBox(height: 50.0),
                 Image.asset(
-                  '/logo/logo.png',
+                  'assets/logo/logo.png',
                   height: 200,
                 ),
                 RoundedButton(
@@ -68,4 +66,3 @@ class RoundedButton extends StatelessWidget {
     );
   }
 }
-

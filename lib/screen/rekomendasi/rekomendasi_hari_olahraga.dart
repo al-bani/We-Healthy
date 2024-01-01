@@ -76,7 +76,7 @@ class _RekomendasiHariOlahragaState extends State<RekomendasiHariOlahraga> {
               size: 30,
             )),
         title: Image.asset(
-          'wehealty.png',
+          'assets/wehealty.png',
           fit: BoxFit.contain,
           height: 170,
         ),
@@ -91,7 +91,7 @@ class _RekomendasiHariOlahragaState extends State<RekomendasiHariOlahraga> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(12.0),
                     child: Image.asset(
-                      'fotohari.png',
+                      'assets/fotohari.png',
                       width: double.infinity,
                       fit: BoxFit.fill,
                       height: 200,

@@ -1,8 +1,7 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:we_healthy/models/user_week_model.dart';
 import 'package:we_healthy/models/workout_day_model.dart';
+import 'package:we_healthy/services/wehealthy_services.dart';
 import 'package:we_healthy/utils/bottom_bar.dart';
 import 'package:we_healthy/utils/config.dart';
 import 'package:we_healthy/models/workout_model.dart';
@@ -42,7 +41,98 @@ class _RekomendasiOlahragaState extends State<RekomendasiOlahraga> {
     selectWorkoutDone();
   }
 
+  Future<void> dialogNotif(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Pemberitahuan"),
+            content: const Text(
+                "Update Berat badan berhasil, anda akan diarahkan ke homepage, untuk melihat progress silahkan pergi ke page statistik"),
+            actions: <Widget>[
+              MaterialButton(
+                color: Colors.green,
+                textColor: Colors.white,
+                child: const Text('OK !'),
+                onPressed: () async {
+                  Navigator.pushNamed(context, 'home_screen',
+                      arguments: {'userId': uid});
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> dialogUpdate(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Berat badan Anda'),
+            content: TextField(
+              keyboardType: TextInputType.number,
+              controller: _textFieldController,
+              decoration:
+                  const InputDecoration(suffix: Text('kg'), hintText: "0"),
+            ),
+            actions: <Widget>[
+              MaterialButton(
+                color: Colors.red,
+                textColor: Colors.white,
+                child: const Text('CANCEL'),
+                onPressed: () {
+                  setState(() {
+                    loadingButton = false;
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              MaterialButton(
+                color: Colors.green,
+                textColor: Colors.white,
+                child: const Text('Lanjutkan'),
+                onPressed: () async {
+                  int statusInsertUserWeek = await insertUserWeek();
+
+                  if (statusInsertUserWeek == 1) {
+                    dialogNotif(context);
+                  } else {
+                    setState(() {
+                      loadingButton = false;
+                    });
+                  }
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> dialogConfirm(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Pemberitahuan"),
+            content: const Text("Update berat badan anda"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                  dialogUpdate(context);
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          );
+        });
+  }
+
   Future<int> insertUserWeek() async {
+    WehealthyLogic whl = WehealthyLogic();
     List<UserWeekModel> checkingUserWeek = [];
     List tempUserWeek = [];
     String bb = _textFieldController.text;
@@ -68,8 +158,12 @@ class _RekomendasiOlahragaState extends State<RekomendasiOlahraga> {
         response.map((e) => UserWeekModel.fromJson(e)).toList();
     if (userWeekInsert.length == 1) {
       await ds.removeAll(token, project, 'workout_day', appid);
+      bool updateUserData =
+          await whl.updateUserData(uid, double.parse(bb), 0, 0, 0);
 
-      return 1;
+      if (updateUserData) {
+        return 1;
+      }
     }
     return 0;
   }
@@ -146,9 +240,9 @@ class _RekomendasiOlahragaState extends State<RekomendasiOlahraga> {
   }
 
   List<String> gambar = [
-    '/rekomendasi/olahraga/pushup.png',
-    '/rekomendasi/olahraga/situp.png',
-    '/rekomendasi/olahraga/pullup.png',
+    'assets/rekomendasi/olahraga/pushup.png',
+    'assets/rekomendasi/olahraga/situp.png',
+    'assets/rekomendasi/olahraga/pullup.png',
   ];
 
   @override
@@ -177,7 +271,7 @@ class _RekomendasiOlahragaState extends State<RekomendasiOlahraga> {
               size: 30,
             )),
         title: Image.asset(
-          'wehealty.png',
+          'assets/wehealty.png',
           fit: BoxFit.contain,
           height: 170,
         ),
@@ -199,7 +293,7 @@ class _RekomendasiOlahragaState extends State<RekomendasiOlahraga> {
                         alignment: Alignment.centerLeft,
                         children: <Widget>[
                           Image.asset(
-                            'Olahraga.png',
+                            'assets/Olahraga.png',
                             width: double.infinity,
                             fit: BoxFit.fill,
                           ),
@@ -258,98 +352,7 @@ class _RekomendasiOlahragaState extends State<RekomendasiOlahraga> {
                                   loadingButton = true;
                                 });
                                 if (day == '7') {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text("Pemberitahuan"),
-                                          content: const Text(
-                                              "Update berat badan anda"),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                setState(() {
-                                                  Navigator.pop(context);
-                                                });
-                                                showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return AlertDialog(
-                                                        title: const Text(
-                                                            'Berat badan Anda'),
-                                                        content: TextField(
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          controller:
-                                                              _textFieldController,
-                                                          decoration:
-                                                              const InputDecoration(
-                                                                  suffix: Text(
-                                                                      'kg'),
-                                                                  hintText:
-                                                                      "0"),
-                                                        ),
-                                                        actions: <Widget>[
-                                                          MaterialButton(
-                                                            color: Colors.red,
-                                                            textColor:
-                                                                Colors.white,
-                                                            child: const Text(
-                                                                'CANCEL'),
-                                                            onPressed: () {
-                                                              setState(() {
-                                                                loadingButton =
-                                                                    false;
-                                                                Navigator.pop(
-                                                                    context);
-                                                              });
-                                                            },
-                                                          ),
-                                                          MaterialButton(
-                                                            color: Colors.green,
-                                                            textColor:
-                                                                Colors.white,
-                                                            child: const Text(
-                                                                'Lanjutkan'),
-                                                            onPressed:
-                                                                () async {
-                                                              int statusInsertUserWeek =
-                                                                  await insertUserWeek();
-
-                                                              if (statusInsertUserWeek ==
-                                                                  1) {
-                                                                Navigator.pushNamed(
-                                                                    context,
-                                                                    'rekomendasi_hari_olahraga',
-                                                                    arguments: {
-                                                                      'periodisasi':
-                                                                          args[
-                                                                              'periodisasi'],
-                                                                      'userId':
-                                                                          args[
-                                                                              'userId'],
-                                                                      'pilihan':
-                                                                          'makanan'
-                                                                    });
-                                                              } else {
-                                                                setState(() {
-                                                                  loadingButton =
-                                                                      false;
-                                                                });
-                                                              }
-                                                            },
-                                                          ),
-                                                        ],
-                                                      );
-                                                    });
-                                              },
-                                              child: const Text("OK"),
-                                            ),
-                                          ],
-                                        );
-                                      });
+                                  dialogConfirm(context);
                                 } else {
                                   insertOlahragaData();
                                 }
