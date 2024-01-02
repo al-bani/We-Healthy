@@ -9,7 +9,7 @@ class Rekomendasi extends StatefulWidget {
 }
 
 class _RekomendasiState extends State<Rekomendasi> {
-  List<String> periodisasi = ['Bulking', 'Maintance', 'Cutting'];
+  List<String> periodisasi = ['Bulking', 'Maintenance', 'Cutting'];
   String userId = ' ';
 
   List<String> deskripsi = [
