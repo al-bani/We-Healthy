@@ -253,23 +253,23 @@ class _DataFisikState extends State<DataFisik> {
                             items: const [
                               DropdownMenuItem(
                                 value: 1.2,
-                                child: Text('Ringan'),
+                                child: Text('Melakukan Aktifitas Ringan (berjalan, duduk, tidur)'),
                               ),
                               DropdownMenuItem(
                                 value: 1.375,
-                                child: Text('Sedang'),
+                                child: Text('Melakukan Pekerjaan ringan (pekerjaan rumah, bekerja dikantor)'),
                               ),
                               DropdownMenuItem(
                                 value: 1.55,
-                                child: Text('Normal'),
+                                child: Text('Bekerja dan Berolahraga (Jogging seminggu 1x, bekerja kantor)'),
                               ),
                               DropdownMenuItem(
                                 value: 1.725,
-                                child: Text('Bekerja'),
+                                child: Text('Sering berolahraga dan bekerja yang menguras tenaga'),
                               ),
                               DropdownMenuItem(
                                 value: 1.9,
-                                child: Text('Berat'),
+                                child: Text('Bekerja keras atau Seorang atlit'),
                               ),
                             ],
                             onChanged: (value) {

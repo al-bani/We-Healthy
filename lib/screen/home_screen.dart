@@ -31,6 +31,8 @@ class _HomePageState extends State<HomePage> {
   String weather = 'loading...';
   String caloriePerDay = ' ';
   String airPolution = 'loading...';
+  String textNotificationCelciusUser = 'loading...';
+  String textNotificationAqiUser = 'loading...';
 
   String setImageWeather(double code) {
     switch (code) {
@@ -94,21 +96,43 @@ class _HomePageState extends State<HomePage> {
       if (fetchedIndexAqi == 1) {
         weatherCondition = "Baik";
         airPolution = '1.png';
+        textNotificationAqiUser =
+            'Udara diluar Sangat baik, Selamat beraktifitas';
       } else if (fetchedIndexAqi == 2) {
         weatherCondition = "Cukup baik";
         airPolution = '2.png';
+        textNotificationAqiUser =
+            'Udara diluar Cukup baik, Jauhi Spot Lingkungan berpolusi';
       } else if (fetchedIndexAqi == 3) {
         airPolution = '3.png';
         weatherCondition = "Sedang";
+        textNotificationAqiUser =
+            'Udara diluar cukup untuk melakukan aktifitas, gunakan masker bila perlu';
       } else if (fetchedIndexAqi == 4) {
         airPolution = '4.png';
         weatherCondition = "Buruk";
+        textNotificationAqiUser =
+            'Udara diluar Buruk, Silahkan gunakan masker untuk menghindari polusi udara';
       } else if (fetchedIndexAqi == 5) {
         airPolution = '5.png';
         weatherCondition = "Sangat Buruk";
+        textNotificationAqiUser =
+            'Udara diluar Sangat buruk, dianjurkan untuk tetap dirumah dan memakai masker saat diluar rumah';
       }
       location = fetchedLocation;
       celcius = (fetchedKelvin - 273.15).roundToDouble();
+
+      if (celcius < 20) {
+        textNotificationCelciusUser =
+            'Suhu diluar Tampak Dingin, dianjurkan menggunakan pakaian hangat';
+      } else if (celcius >= 20 && celcius <= 29) {
+        textNotificationCelciusUser =
+            'Suhu diluar tampak Normal, Selamat Beraktifitas';
+      } else if (celcius > 29) {
+        textNotificationCelciusUser =
+            'Suhu diluar tampak panas, dianjurkan menggunakan pakaian yang tidak menyebabkan Panas';
+      }
+
       checkDataAPI(weatherCondition, celcius, location, weather, airPolution);
     });
   }
@@ -296,7 +320,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(20),
                                     child: Text(
-                                        "Dianjurkan Menggunakan Masker karena cuaca yang buruk dan Menggunakan Sunscreen untuk menjaga Kulit anda"),
+                                        "$textNotificationCelciusUser dan $textNotificationAqiUser"),
                                   ),
                                 ),
                               ),
@@ -386,8 +410,8 @@ class _HomePageState extends State<HomePage> {
                                       Expanded(
                                         flex: 1,
                                         child: Container(
-                                          width: 100,
-                                          height: 100,
+                                          width: 130,
+                                          height: 130,
                                           alignment: Alignment.center,
                                           child: Text(
                                             "${_dataUser[0].bmi}",
@@ -406,8 +430,8 @@ class _HomePageState extends State<HomePage> {
                                       Expanded(
                                         flex: 1,
                                         child: Container(
-                                          width: 100,
-                                          height: 100,
+                                          width: 130,
+                                          height: 130,
                                           alignment: Alignment.center,
                                           child: Center(
                                             child: Column(
@@ -438,30 +462,6 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ),
                                       const SizedBox(width: 15),
-                                      Expanded(
-                                          child: Column(
-                                        children: [
-                                          Text(
-                                            "SKOR BMI",
-                                            style: TextStyle(
-                                                fontSize: 17.0,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.blueAccent),
-                                          ),
-                                          SizedBox(height: 10),
-                                          ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  primary: Colors.blueAccent,
-                                                  onPrimary: Colors.white),
-                                              onPressed: () {
-                                                Navigator.pushNamed(
-                                                  context,
-                                                  'detail_bmi',
-                                                );
-                                              },
-                                              child: Text('Detail'))
-                                        ],
-                                      )),
                                     ],
                                   ),
                                 ),

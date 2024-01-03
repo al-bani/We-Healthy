@@ -145,7 +145,7 @@ class _BmiDetailState extends State<BmiDetail> {
                         ),
                       ),
                       const SizedBox(height: 15),
-                      Card(
+                      const Card(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,

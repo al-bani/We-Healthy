@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:we_healthy/models/makanan_day_model.dart';
+import 'package:we_healthy/models/user_model.dart';
 import 'package:we_healthy/models/user_week_model.dart';
 import 'package:we_healthy/models/workout_day_model.dart';
 import 'package:we_healthy/services/etter_services.dart';
@@ -22,9 +23,21 @@ class _StatistikPageState extends State<StatistikPage> {
   List<int> points = List.filled(7, 0);
   String uid = '';
   bool loading = true;
+  double bmi = 0;
+  String classification = "loading...";
 
   void getDataProgress() async {
     await Future.delayed(Duration(seconds: 3));
+    List tempData = [];
+    List<UserDataModel> _dataUser = [];
+
+    tempData = jsonDecode(await ds.selectWhere(
+        token, project, "user_data", appid, 'user_id', uid));
+    _dataUser = tempData.map((e) => UserDataModel.fromJson(e)).toList();
+
+    bmi = double.parse(_dataUser[0].bmi);
+    classification = _dataUser[0].kategori_berat;
+
     List<MakananDayModel> makananDataEtter = [];
     List<WorkoutDayModel> workoutDataEtter = [];
     List<int> makananPts = List.filled(7, 0);
@@ -80,11 +93,13 @@ class _StatistikPageState extends State<StatistikPage> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         automaticallyImplyLeading: false,
-        title: Image.asset(
-          'assets/wehealty.png',
-          fit: BoxFit.contain,
-          height: 170,
+        elevation: 0,
+        title: Center(
+          child: Image.asset(
+              '/logo/logo_blue.png' // Sesuaikan dengan tinggi yang diinginkan
+              ),
         ),
       ),
       backgroundColor: Color.fromRGBO(230, 231, 235, 100),
@@ -164,6 +179,8 @@ class _StatistikPageState extends State<StatistikPage> {
                         ),
                       ),
                       SizedBox(height: 25),
+                      BmiDetails(bmi: bmi, classification: classification),
+                      SizedBox(height: 25),
                       ChartCard(),
                     ],
                   ),
@@ -171,6 +188,212 @@ class _StatistikPageState extends State<StatistikPage> {
               ),
             ),
       bottomNavigationBar: bottomNavigationBar(userId: uid),
+    );
+  }
+}
+
+class BmiDetails extends StatelessWidget {
+  final double bmi;
+  final String classification;
+
+  const BmiDetails({Key? key, required this.bmi, required this.classification})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                SizedBox(height: 20),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    alignment: Alignment.center,
+                    child: Text(
+                      "$bmi",
+                      style: TextStyle(
+                        fontSize: 32.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xFFe0f2f1),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 15),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    alignment: Alignment.center,
+                    child: Text(
+                      classification,
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0xFFe0f2f1),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 15),
+                Expanded(
+                  child: Text(
+                    "Hasil BMI anda",
+                    style: TextStyle(
+                      fontSize: 17.0,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 17),
+          Padding(
+            padding: const EdgeInsets.only(left: 20, top: 20),
+            child: Text(
+              'Klasifikasi Skor BMI',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '18.5 kebawah',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          '18.6 - 24.9',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          '25 - 29.9',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          '30 - 34.9',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          '35 - 39.9',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          '40 Keatas',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    )),
+                Padding(
+                    padding: EdgeInsets.all(5),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Kurus',
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'normal',
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Kelebihan berat',
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 231, 214, 59)),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Obesitas 1',
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.orange),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Obesitas 2',
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Obesitas 3',
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 109, 0, 0)),
+                        ),
+                      ],
+                    )),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -449,7 +672,7 @@ Widget bottomTitleWidget(double value, TitleMeta meta) {
   return SideTitleWidget(
     axisSide: meta.axisSide,
     child: Text(
-      'Week ${value.toInt() + 1}',
+      'Minggu ${value.toInt() + 1}',
     ),
   );
 }

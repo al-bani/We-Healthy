@@ -1,9 +1,12 @@
 import 'dart:convert';
-
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'package:we_healthy/models/user_model.dart';
 import 'package:we_healthy/services/etter_services.dart';
 import 'package:we_healthy/services/wehealthy_services.dart';
@@ -36,6 +39,10 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
+  FilePickerResult? result;
+  List<PlatformFile>? selectedFiles = [];
   bool _loading = false;
   final nama = TextEditingController();
   final user_id = TextEditingController();
@@ -45,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final tinggi_badan = TextEditingController();
   final bmi = TextEditingController();
   final kalori_perhari = TextEditingController();
-  double kegiatan = 1.9;
+  double kegiatan = 1.2;
   final kategori_berat = TextEditingController();
   bool loadData = false;
   bool loading = true;
@@ -58,6 +65,9 @@ class _ProfilePageState extends State<ProfilePage> {
   late Future<DateTime?> selectedAge;
   late int umurPicker;
   WehealthyLogic whl = WehealthyLogic();
+  bool isMen = false;
+  bool textfieldRead = true;
+  bool visibilityUpdateBtn = false;
 
   @override
   void initState() {
@@ -77,6 +87,9 @@ class _ProfilePageState extends State<ProfilePage> {
     _dataUser = tempData.map((e) => UserDataModel.fromJson(e)).toList();
 
     setState(() {
+      if (_dataUser[0].gender == 'Pria') {
+        isMen = true;
+      }
       gender = _dataUser[0].gender;
       umur.text = _dataUser[0].umur;
       berat_badan.text = _dataUser[0].berat_badan;
@@ -100,6 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
         elevation: 0,
         title: Center(
           child: Image.asset(
@@ -118,11 +132,21 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Card(
                       child: Row(
                         children: [
-                          Padding(
-                            padding: EdgeInsets.all(10),
-                            child: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: Icon(Icons.person),
+                          GestureDetector(
+                            onTap: () {},
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: isMen
+                                  ? CircleAvatar(
+                                      backgroundColor: Colors.blue,
+                                      foregroundColor: Colors.white,
+                                      child: Icon(Icons.person),
+                                    )
+                                  : CircleAvatar(
+                                      backgroundColor: Colors.pink,
+                                      foregroundColor: Colors.white,
+                                      child: Icon(Icons.person),
+                                    ),
                             ),
                           ),
                           Padding(
@@ -150,15 +174,25 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                 ),
                                 Padding(
-                                    padding: EdgeInsets.all(2),
+                                  padding: EdgeInsets.all(2),
+                                  child: Visibility(
+                                    visible: textfieldRead,
                                     child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            primary: Colors.blueAccent,
-                                            onPrimary: Colors.white),
-                                        onPressed: () {},
-                                        child: Text(
-                                          'Lihat Profile',
-                                        ))),
+                                      style: ElevatedButton.styleFrom(
+                                          primary: Colors.blueAccent,
+                                          onPrimary: Colors.white),
+                                      onPressed: () {
+                                        setState(() {
+                                          textfieldRead = false;
+                                          visibilityUpdateBtn = true;
+                                        });
+                                      },
+                                      child: Text(
+                                        'Update Data',
+                                      ),
+                                    ),
+                                  ),
+                                )
                               ],
                             ),
                           )
@@ -181,6 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   SizedBox(height: 5),
                                   TextField(
                                       controller: umur,
+                                      readOnly: textfieldRead,
                                       onTap: () => showDialogPicker(context),
                                       keyboardType: TextInputType.number,
                                       textAlign: TextAlign.left,
@@ -201,6 +236,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           SizedBox(height: 5),
                           TextField(
                               controller: berat_badan,
+                              readOnly: textfieldRead,
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.left,
                               decoration:
@@ -217,6 +253,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           SizedBox(height: 5),
                           TextField(
                               controller: tinggi_badan,
+                              readOnly: textfieldRead,
                               keyboardType: TextInputType.number,
                               textAlign: TextAlign.left,
                               decoration:
@@ -237,23 +274,38 @@ class _ProfilePageState extends State<ProfilePage> {
                             items: const [
                               DropdownMenuItem(
                                 value: 1.2,
-                                child: Text('Ringan'),
+                                child: Text(
+                                  'Melakukan Aktifitas Ringan',
+                                  style: TextStyle(fontSize: 14),
+                                ),
                               ),
                               DropdownMenuItem(
                                 value: 1.375,
-                                child: Text('Sedang'),
+                                child: Text(
+                                  'Melakukan Pekerjaan ringan',
+                                  style: TextStyle(fontSize: 14),
+                                ),
                               ),
                               DropdownMenuItem(
                                 value: 1.55,
-                                child: Text('Normal'),
+                                child: Text(
+                                  'Bekerja dan Berolahraga pasif',
+                                  style: TextStyle(fontSize: 14),
+                                ),
                               ),
                               DropdownMenuItem(
                                 value: 1.725,
-                                child: Text('Bekerja'),
+                                child: Text(
+                                  'Sering berolahraga dan bekerja',
+                                  style: TextStyle(fontSize: 14),
+                                ),
                               ),
                               DropdownMenuItem(
                                 value: 1.9,
-                                child: Text('Berat'),
+                                child: Text(
+                                  'Bekerja keras atau Seorang atlit',
+                                  style: TextStyle(fontSize: 14),
+                                ),
                               ),
                             ],
                             onChanged: (newValue) {
@@ -272,34 +324,37 @@ class _ProfilePageState extends State<ProfilePage> {
                       height: 45,
                       child: _loading
                           ? const CircularProgressIndicator()
-                          : ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.blueAccent,
-                              ),
-                              onPressed: () async {
-                                setState(() {
-                                  _loading = true;
-                                });
-                                String bb = berat_badan.text;
-                                String um = umur.text;
-                                String tb = tinggi_badan.text;
-                                print(userId);
-                                bool updateStatus = await whl.updateUserData(
-                                    userId,
-                                    double.parse(bb),
-                                    kegiatan,
-                                    int.parse(um),
-                                    double.parse(tb));
+                          : Visibility(
+                              visible: visibilityUpdateBtn,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.blueAccent,
+                                ),
+                                onPressed: () async {
+                                  setState(() {
+                                    _loading = true;
+                                  });
+                                  String bb = berat_badan.text;
+                                  String um = umur.text;
+                                  String tb = tinggi_badan.text;
 
-                                if (updateStatus) {
-                                  Navigator.pushNamed(context, 'profile_page',
-                                      arguments: {
-                                        'userId': userId,
-                                      });
-                                }
-                              },
-                              child: const Text('Update',
-                                  style: TextStyle(color: Colors.white)),
+                                  bool updateStatus = await whl.updateUserData(
+                                      userId,
+                                      double.parse(bb),
+                                      kegiatan,
+                                      int.parse(um),
+                                      double.parse(tb));
+
+                                  if (updateStatus) {
+                                    Navigator.pushNamed(context, 'profile_page',
+                                        arguments: {
+                                          'userId': userId,
+                                        });
+                                  }
+                                },
+                                child: const Text('Update',
+                                    style: TextStyle(color: Colors.white)),
+                              ),
                             ),
                     ),
                   ),
@@ -338,7 +393,7 @@ class _ProfilePageState extends State<ProfilePage> {
           umurPicker--;
         }
 
-        umur.text = umurPicker.toString();
+        umur.text = '${umurPicker.toString()} Tahun';
       });
     }, onError: (error) {
       if (kDebugMode) {
