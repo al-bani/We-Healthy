@@ -24,6 +24,7 @@ class RestApi {
       await Geolocator.getCurrentPosition(
               desiredAccuracy: LocationAccuracy.high)
           .then((Position position) => {_currentPosition = position});
+
       _lat = _currentPosition?.latitude;
       _long = _currentPosition?.longitude;
 
@@ -57,7 +58,7 @@ class RestApi {
         city = decodedData[0]['name'];
         province = decodedData[0]['state'];
         location = "$city, $province";
-        print(location);
+
         return location;
       }
     } catch (e) {
@@ -67,11 +68,12 @@ class RestApi {
     return location = '-';
   }
 
-  Future<List<double>> getCurrentWeather() async {
-    late List<double> weatherData = [];
-    List<double> koordinat = await getLocationUser();
+  Future<List<num>> getCurrentWeather() async {
+    late List<num> weatherData = [];
+    List koordinat = await getLocationUser();
     double latitude = koordinat[0];
     double longitude = koordinat[1];
+
     String url =
         "https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apikeyOpenWeather";
 
@@ -94,7 +96,7 @@ class RestApi {
   }
 
   Future<int> getAirPollution() async {
-    late int? indexAqi;
+    late int indexAqi;
     List<double> koordinat = await getLocationUser();
     double latitude = koordinat[0];
     double longitude = koordinat[1];
@@ -107,8 +109,8 @@ class RestApi {
       if (response.statusCode == 200) {
         final decodedData = json.decode(response.body);
         indexAqi = decodedData['list'][0]['main']['aqi'];
-        print(indexAqi);
-        return indexAqi!;
+
+        return indexAqi;
       } else {}
     } catch (e) {}
 

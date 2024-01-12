@@ -27,6 +27,7 @@ class WehealthyLogic {
     } else {
       nilaiBmr = (10 * kg) + (6.25 * cm) - (5 * umur) - 161;
     }
+
     return nilaiBmr;
   }
 
@@ -59,6 +60,7 @@ class WehealthyLogic {
       "protein": foodProtein,
       "fats": foodFats,
     };
+
 
     return tripleFoodList;
   }
@@ -178,8 +180,6 @@ class WehealthyLogic {
     if (metValue == 0) {
       metValue = double.parse(getUserData[0].kegiatan);
     }
-
-    print('metValue : $metValue');
 
     if (tb == 0) {
       tb = double.parse(getUserData[0].tinggi_badan);

@@ -293,7 +293,7 @@ class _RekomendasiOlahragaState extends State<RekomendasiOlahraga> {
                         alignment: Alignment.centerLeft,
                         children: <Widget>[
                           Image.asset(
-                            'assets/Olahraga.png',
+                            'assets/olahraga.png',
                             width: double.infinity,
                             fit: BoxFit.fill,
                           ),

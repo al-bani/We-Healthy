@@ -85,7 +85,7 @@ class _DataFisikState extends State<DataFisik> {
             Padding(
               padding: EdgeInsets.only(left: 30, right: 30, top: 70),
               child: Image.asset(
-                'logo/logo_white.png',
+                'assets/logo/logo_white.png',
                 width: 300,
                 fit: BoxFit.fill,
               ),
@@ -130,6 +130,7 @@ class _DataFisikState extends State<DataFisik> {
                                 child: DropdownButtonFormField(
                                   decoration: InputDecoration(
                                     labelText: 'Jenis Kelamin',
+                                    labelStyle: TextStyle(fontSize: 10),
                                     contentPadding: const EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 10),
                                     filled: true,
@@ -147,11 +148,17 @@ class _DataFisikState extends State<DataFisik> {
                                   items: [
                                     DropdownMenuItem(
                                       value: 'Pria',
-                                      child: Text('Laki-laki'),
+                                      child: Text(
+                                        'Pria',
+                                        style: TextStyle(fontSize: 10),
+                                      ),
                                     ),
                                     DropdownMenuItem(
                                       value: 'Wanita',
-                                      child: Text('Perempuan'),
+                                      child: Text(
+                                        'Wanita',
+                                        style: TextStyle(fontSize: 10),
+                                      ),
                                     ),
                                   ],
                                   onChanged: (value) {
@@ -161,17 +168,17 @@ class _DataFisikState extends State<DataFisik> {
                                   },
                                 ),
                               ),
-                              const SizedBox(width: 20.0),
+                              const SizedBox(width: 15.0),
                               Expanded(
                                 child: TextFormField(
                                   onTap: () => showDialogPicker(context),
                                   controller: _umurTextController,
+                                  style: TextStyle(fontSize: 10),
                                   decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 10),
-                                    labelText: 'Umur', // Icon be
-                                    hintText: 'Tahun',
-
+                                    labelText: 'Tanggal lahir',
+                                    labelStyle: TextStyle(fontSize: 10),
                                     filled: true,
                                     prefixIcon: const Icon(Icons.access_time),
                                     fillColor: Colors.grey[200],
@@ -253,23 +260,38 @@ class _DataFisikState extends State<DataFisik> {
                             items: const [
                               DropdownMenuItem(
                                 value: 1.2,
-                                child: Text('Melakukan Aktifitas Ringan (berjalan, duduk, tidur)'),
+                                child: Text(
+                                  'Melakukan Aktifitas Ringan',
+                                  style: TextStyle(fontSize: 14),
+                                ),
                               ),
                               DropdownMenuItem(
                                 value: 1.375,
-                                child: Text('Melakukan Pekerjaan ringan (pekerjaan rumah, bekerja dikantor)'),
+                                child: Text(
+                                  'Melakukan Pekerjaan ringan',
+                                  style: TextStyle(fontSize: 14),
+                                ),
                               ),
                               DropdownMenuItem(
                                 value: 1.55,
-                                child: Text('Bekerja dan Berolahraga (Jogging seminggu 1x, bekerja kantor)'),
+                                child: Text(
+                                  'Bekerja dan Berolahraga pasif',
+                                  style: TextStyle(fontSize: 14),
+                                ),
                               ),
                               DropdownMenuItem(
                                 value: 1.725,
-                                child: Text('Sering berolahraga dan bekerja yang menguras tenaga'),
+                                child: Text(
+                                  'Sering berolahraga dan bekerja',
+                                  style: TextStyle(fontSize: 14),
+                                ),
                               ),
                               DropdownMenuItem(
                                 value: 1.9,
-                                child: Text('Bekerja keras atau Seorang atlit'),
+                                child: Text(
+                                  'Bekerja keras atau Seorang atlit',
+                                  style: TextStyle(fontSize: 14),
+                                ),
                               ),
                             ],
                             onChanged: (value) {

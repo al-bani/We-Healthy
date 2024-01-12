@@ -113,12 +113,10 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false,
         elevation: 0,
+        automaticallyImplyLeading: false,
         title: Center(
-          child: Image.asset(
-              '/logo/logo_blue.png' // Sesuaikan dengan tinggi yang diinginkan
-              ),
+          child: Image.asset('assets/logo/logo_blue.png'),
         ),
       ),
       body: Padding(

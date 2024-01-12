@@ -229,7 +229,7 @@ class _LoginPageState extends State<LoginPage> {
                                                   user.uid));
 
                                           if (userDataCheck.length == 0) {
-                                            print(userDataCheck);
+                                           
                                             Navigator.of(context)
                                                 .pushReplacement(
                                               MaterialPageRoute(

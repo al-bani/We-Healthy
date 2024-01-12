@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
   List<UserDataModel> _dataUser = [];
   DataService ds = DataService();
   String _calorieWeekly = ' ';
-  String userId = 'null hehe';
+  String userId = 'null';
   final FirebaseAuth auth = FirebaseAuth.instance;
   String weather = 'loading...';
   String caloriePerDay = ' ';
@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
   String textNotificationAqiUser = 'loading...';
 
   String setImageWeather(double code) {
+    print("is here 12");
     switch (code) {
       case >= 200 && < 300:
         return 'hujan petir.png';
@@ -65,7 +66,7 @@ class _HomePageState extends State<HomePage> {
 
     _dataUser = tempData.map((e) => UserDataModel.fromJson(e)).toList();
 
-    int tempCalorie = int.parse(_dataUser[0].kalori_perhari);
+    double tempCalorie = double.parse(_dataUser[0].kalori_perhari);
     _calorieWeekly = NumberFormat("#,##0.###").format(tempCalorie * 7);
     caloriePerDay = NumberFormat("#,##0.###").format(tempCalorie);
   }
@@ -86,13 +87,14 @@ class _HomePageState extends State<HomePage> {
   Future<void> fetchDataAPI() async {
     String fetchedLocation = await rsa.getCurrentLocationUser();
     int fetchedIndexAqi = await rsa.getAirPollution();
-    List<double> weatherData = await rsa.getCurrentWeather();
+    List<num> weatherData = await rsa.getCurrentWeather();
 
-    double fetchedKelvin = weatherData[0];
-    double fetchedWeatherCode = weatherData[1];
+    double fetchedKelvin = weatherData[0].toDouble();
+    double fetchedWeatherCode = weatherData[0].toDouble();
 
     setState(() {
       weather = setImageWeather(fetchedWeatherCode);
+
       if (fetchedIndexAqi == 1) {
         weatherCondition = "Baik";
         airPolution = '1.png';
@@ -119,6 +121,7 @@ class _HomePageState extends State<HomePage> {
         textNotificationAqiUser =
             'Udara diluar Sangat buruk, dianjurkan untuk tetap dirumah dan memakai masker saat diluar rumah';
       }
+
       location = fetchedLocation;
       celcius = (fetchedKelvin - 273.15).roundToDouble();
 
@@ -132,8 +135,10 @@ class _HomePageState extends State<HomePage> {
         textNotificationCelciusUser =
             'Suhu diluar tampak panas, dianjurkan menggunakan pakaian yang tidak menyebabkan Panas';
       }
+      print("is here 5");
 
       checkDataAPI(weatherCondition, celcius, location, weather, airPolution);
+      print("is here 6");
     });
   }
 
@@ -166,13 +171,19 @@ class _HomePageState extends State<HomePage> {
     return true;
   }
 
+  void locationAllowed() async {
+    bool locationRequest = await _handleLocationPermission();
+    if (locationRequest) {
+      fetchDataAPI();
+      selectUserData();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
 
-    _handleLocationPermission();
-    fetchDataAPI();
-    selectUserData();
+    locationAllowed();
   }
 
   @override
@@ -500,7 +511,7 @@ class _HomePageState extends State<HomePage> {
                                                     '$caloriePerDay kcal',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
-                                                      fontSize: 24,
+                                                      fontSize: 18,
                                                     ),
                                                   ),
                                                   subtitle: Text(
@@ -521,14 +532,14 @@ class _HomePageState extends State<HomePage> {
                                                     '$_calorieWeekly kcal',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
-                                                      fontSize: 24,
+                                                      fontSize: 18,
                                                     ),
                                                   ),
                                                   subtitle: Text(
                                                     'Kalori per Minggu',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
-                                                      fontSize: 13,
+                                                      fontSize: 11,
                                                     ),
                                                   ),
                                                 ),
@@ -542,17 +553,20 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               SizedBox(height: 20),
-                              ElevatedButton(
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      primary: Colors.white,
-                                      onPrimary: Colors.black,
-                                      padding: EdgeInsets.only(
-                                          left: 130, right: 130)),
+                                    primary: Colors.white,
+                                    onPrimary: Colors.black,
+                                  ),
                                   onPressed: () {
                                     Navigator.pushNamed(context, 'rekomendasi',
                                         arguments: {'userId': userId});
                                   },
-                                  child: Text('Lihat Rekomendasi'))
+                                  child: Text('Lihat Rekomendasi'),
+                                ),
+                              )
                             ],
                           ),
                         ),

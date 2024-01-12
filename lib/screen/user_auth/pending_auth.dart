@@ -105,18 +105,11 @@ class _PendingAuthPageState extends State<PendingAuthPage> {
             SizedBox(height: 100),
             Image.asset(
               'assets/logo/logo_white.png',
-              width: 190,
-              height: 70,
+              width: 170,
+              height: 57,
               fit: BoxFit.fill,
             ),
-            SizedBox(height: 120),
-            Image.asset(
-              'assets/logo/verification_page.png',
-              width: 390,
-              height: 220,
-              fit: BoxFit.fill,
-            ),
-            SizedBox(height: 20),
+            SizedBox(height: 140),
             Text(
               "Verifikasi Email anda !",
               style: TextStyle(

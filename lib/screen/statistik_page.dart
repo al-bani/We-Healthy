@@ -94,15 +94,12 @@ class _StatistikPageState extends State<StatistikPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false,
         elevation: 0,
+        automaticallyImplyLeading: false,
         title: Center(
-          child: Image.asset(
-              '/logo/logo_blue.png' // Sesuaikan dengan tinggi yang diinginkan
-              ),
+          child: Image.asset('assets/logo/logo_blue.png'),
         ),
       ),
-      backgroundColor: Color.fromRGBO(230, 231, 235, 100),
       body: loading
           ? Center(child: CircularProgressIndicator())
           : Padding(
@@ -181,7 +178,7 @@ class _StatistikPageState extends State<StatistikPage> {
                       SizedBox(height: 25),
                       BmiDetails(bmi: bmi, classification: classification),
                       SizedBox(height: 25),
-                      ChartCard(),
+                      ChartCard(userId: uid),
                     ],
                   ),
                 ),
@@ -424,7 +421,11 @@ class DayColumn extends StatelessWidget {
 }
 
 class ChartCard extends StatefulWidget {
-  const ChartCard({super.key});
+  final String userId;
+  const ChartCard({
+    Key? key,
+    required this.userId,
+  }) : super(key: key);
 
   @override
   State<ChartCard> createState() => _ChartCardState();
@@ -441,8 +442,8 @@ class _ChartCardState extends State<ChartCard> {
   Future getWeightWeek() async {
     await Future.delayed(const Duration(seconds: 3));
     List<UserWeekModel> getWeight = [];
-    List tempGetWeight = jsonDecode(await ds.selectWhere(token, project,
-        'user_week', appid, 'user_id', '59w6w4ZOUCeUfVh6HQ0yl5pnm6Q2'));
+    List tempGetWeight = jsonDecode(await ds.selectWhere(
+        token, project, 'user_week', appid, 'user_id', widget.userId));
 
     getWeight = tempGetWeight.map((e) => UserWeekModel.fromJson(e)).toList();
     berat = getWeight.map((UserWeekModel model) {
@@ -554,8 +555,9 @@ class _ChartCardState extends State<ChartCard> {
                           ],
                         ),
                         SizedBox(height: 20),
-                        AspectRatio(
-                          aspectRatio: 2.2,
+                        SizedBox(
+                          width: double.infinity,
+                          height: 400,
                           child: Padding(
                               padding: EdgeInsets.only(
                                   right: 18, top: 24, bottom: 12),
